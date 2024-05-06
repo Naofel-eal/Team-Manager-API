@@ -1,6 +1,5 @@
 package com.naofeleal.teammanager.infrastructure.database.adapter;
 
-import com.naofeleal.teammanager.core.application.exception.authentication.EmailNotFoundException;
 import com.naofeleal.teammanager.core.application.repository.IUserRepository;
 import com.naofeleal.teammanager.core.domain.model.user.User;
 import com.naofeleal.teammanager.infrastructure.database.mapper.IDBUserMapper;

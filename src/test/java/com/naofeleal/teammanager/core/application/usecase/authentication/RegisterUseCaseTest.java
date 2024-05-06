@@ -3,7 +3,7 @@ package com.naofeleal.teammanager.core.application.usecase.authentication;
 import com.naofeleal.teammanager.core.application.exception.authentication.AlreadyUsedEmailException;
 import com.naofeleal.teammanager.core.application.repository.IUserRepository;
 import com.naofeleal.teammanager.core.application.usecase.authentication.dto.RegisterUserDTO;
-import com.naofeleal.teammanager.core.domain.model.role.Role;
+import com.naofeleal.teammanager.core.domain.model.role.RoleEnum;
 import com.naofeleal.teammanager.core.domain.model.user.Email;
 import com.naofeleal.teammanager.core.domain.model.user.Name;
 import com.naofeleal.teammanager.core.domain.model.user.Password;
@@ -60,7 +60,7 @@ class RegisterUseCaseTest {
             new Name("Fel"),
             new Email("example@gmail.com"),
             Password.fromRaw("8AbcDefGh8", passwordEncoder::encode),
-            Role.USER
+            RoleEnum.USER
         );
         when(userRepository.findByEmail("example@gmail.com")).thenReturn(Optional.of(user));
 

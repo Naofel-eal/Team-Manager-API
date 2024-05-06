@@ -30,9 +30,7 @@ public class DBUser implements UserDetails {
         this.role = role;
     }
 
-    public DBUser() {
-
-    }
+    public DBUser() {}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

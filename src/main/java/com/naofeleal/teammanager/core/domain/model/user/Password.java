@@ -1,7 +1,7 @@
 package com.naofeleal.teammanager.core.domain.model.user;
 
 import com.naofeleal.teammanager.core.domain.exception.authentication.InvalidPasswordException;
-import com.naofeleal.teammanager.shared.StringUtils;
+import com.naofeleal.teammanager.shared.utils.StringUtils;
 
 import java.util.function.UnaryOperator;
 
@@ -13,7 +13,7 @@ public class Password {
         this._value = encodedValue;
     }
 
-    public static Password fromRaw(final String rawValue, final UnaryOperator<String> encoderFn) {
+    public static Password fromRaw(final String rawValue, final UnaryOperator<String> encoderFn) throws InvalidPasswordException {
         if (!Password.isValid(rawValue)) {
             throw new InvalidPasswordException();
         }

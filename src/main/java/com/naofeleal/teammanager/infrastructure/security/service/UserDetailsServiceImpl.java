@@ -18,7 +18,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) {
+    public UserDetails loadUserByUsername(String email) throws EmailNotFoundException {
         Optional<DBUser> dbUser = this._dbUserRepository.findByEmail(email);
         if (dbUser.isEmpty()) {
             throw new EmailNotFoundException(email);

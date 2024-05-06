@@ -1,12 +1,12 @@
 package com.naofeleal.teammanager.core.domain.model.user;
 
 import com.naofeleal.teammanager.core.domain.exception.authentication.InvalidNameException;
-import com.naofeleal.teammanager.shared.StringUtils;
+import com.naofeleal.teammanager.shared.utils.StringUtils;
 
 public class Name {
     private final String _value;
 
-    public Name(final String value) {
+    public Name(final String value) throws InvalidNameException {
         if (!this.isValid(value)) {
             throw new InvalidNameException(value);
         }
@@ -16,7 +16,7 @@ public class Name {
     private boolean isValid(final String value) {
         final String nameWithoutWhiteSpaces = StringUtils.removeWhiteSpaces(value);
         return !nameWithoutWhiteSpaces.isEmpty() &&
-                StringUtils.isAlphabetic(nameWithoutWhiteSpaces);
+            StringUtils.isAlphabetic(nameWithoutWhiteSpaces);
     }
 
     @Override

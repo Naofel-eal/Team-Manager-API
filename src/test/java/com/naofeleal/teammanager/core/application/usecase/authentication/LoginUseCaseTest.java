@@ -4,7 +4,7 @@ import com.naofeleal.teammanager.core.application.exception.authentication.Email
 import com.naofeleal.teammanager.core.application.repository.IJWTService;
 import com.naofeleal.teammanager.core.application.repository.IUserRepository;
 import com.naofeleal.teammanager.core.domain.exception.authentication.InvalidPasswordException;
-import com.naofeleal.teammanager.core.domain.model.role.Role;
+import com.naofeleal.teammanager.core.domain.model.role.RoleEnum;
 import com.naofeleal.teammanager.core.domain.model.user.Email;
 import com.naofeleal.teammanager.core.domain.model.user.Name;
 import com.naofeleal.teammanager.core.domain.model.user.Password;
@@ -46,7 +46,7 @@ class LoginUseCaseTest {
                 new Name("Fel"),
                 new Email("example@gmail.com"),
                 new Password("insecure_password"),
-                Role.USER
+                RoleEnum.USER
         );
     }
 

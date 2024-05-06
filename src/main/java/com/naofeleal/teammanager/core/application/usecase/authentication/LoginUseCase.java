@@ -27,7 +27,7 @@ public class LoginUseCase implements ILoginUseCase {
         _userRepository = userRepository;
     }
 
-    public String execute(String email, String password) {
+    public String execute(String email, String password) throws EmailNotFoundException {
         _authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 email,

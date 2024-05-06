@@ -4,9 +4,9 @@ import com.naofeleal.teammanager.core.application.usecase.authentication.dto.Reg
 import com.naofeleal.teammanager.core.application.usecase.authentication.interfaces.ILoginUseCase;
 import com.naofeleal.teammanager.core.application.usecase.authentication.interfaces.IRegisterUseCase;
 import com.naofeleal.teammanager.infrastructure.ihm.mapper.authentication.IRegisterMapper;
-import com.naofeleal.teammanager.infrastructure.ihm.model.request.AuthenticationRequest;
-import com.naofeleal.teammanager.infrastructure.ihm.model.request.RegisterRequest;
-import com.naofeleal.teammanager.infrastructure.ihm.model.response.AuthenticationResponse;
+import com.naofeleal.teammanager.infrastructure.ihm.model.authentication.request.AuthenticationRequest;
+import com.naofeleal.teammanager.infrastructure.ihm.model.authentication.request.RegisterRequest;
+import com.naofeleal.teammanager.infrastructure.ihm.model.authentication.response.AuthenticationResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

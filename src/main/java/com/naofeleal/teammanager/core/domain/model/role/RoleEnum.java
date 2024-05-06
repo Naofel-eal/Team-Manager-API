@@ -1,13 +1,13 @@
 package com.naofeleal.teammanager.core.domain.model.role;
 
-public enum Role {
+public enum RoleEnum {
     USER("USER"),
     MANAGER("MANAGER"),
     ADMIN("ADMIN");
 
     private final String _value;
 
-    Role(final String value) {
+    RoleEnum(final String value) {
         this._value = value;
     }
 

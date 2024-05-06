@@ -24,7 +24,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     }
 
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException, InvalidPasswordException {
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();
         UserDetails user = userDetailsService.loadUserByUsername(username);

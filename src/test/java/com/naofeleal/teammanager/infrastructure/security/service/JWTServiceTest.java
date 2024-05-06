@@ -1,7 +1,7 @@
 package com.naofeleal.teammanager.infrastructure.security.service;
 
 import com.naofeleal.teammanager.core.application.repository.IJWTService;
-import com.naofeleal.teammanager.core.domain.model.role.Role;
+import com.naofeleal.teammanager.core.domain.model.role.RoleEnum;
 import com.naofeleal.teammanager.core.domain.model.user.Email;
 import com.naofeleal.teammanager.core.domain.model.user.Name;
 import com.naofeleal.teammanager.core.domain.model.user.Password;
@@ -48,20 +48,20 @@ class JWTServiceTest {
             new Name("Fel"),
             new Email("test@example.com"),
             new Password("insecure_password"),
-            Role.USER
+            RoleEnum.USER
         );
         _dbUser = new DBUser(
                 "Nao",
                 "Fel",
                 "test@example.com",
                 "insecure_password",
-                Role.USER.toString()
+                RoleEnum.USER.toString()
         );
         when(_userMapper.fromDomainModel(any(User.class))).thenReturn(_dbUser);
     }
 
     @Test
-    void generateToken_shouldGenerateValidToken() {
+    void generateTokenShouldGenerateValidToken() {
         String token = _jwtService.generateToken(_user);
 
         assertNotNull(token);
@@ -70,7 +70,7 @@ class JWTServiceTest {
     }
 
     @Test
-    void generateTokenWithExtraClaims_shouldGenerateTokenWithClaims() {
+    void generateTokenWithExtraClaimsShouldGenerateTokenWithClaims() {
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("role", "ADMIN");
 
@@ -85,7 +85,7 @@ class JWTServiceTest {
     }
 
     @Test
-    void isTokenValid_shouldReturnTrueForValidToken() {
+    void isTokenValidShouldReturnTrueForValidToken() {
         UserDetails userDetails = _dbUser;
         String token = _jwtService.generateToken(_user);
 
@@ -93,7 +93,7 @@ class JWTServiceTest {
     }
 
     @Test
-    void isTokenValid_shouldReturnFalseForInvalidToken() {
+    void isTokenValidShouldReturnFalseForInvalidToken() {
         UserDetails userDetails = _dbUser;
         String validToken = _jwtService.generateToken(_user);
         String invalidToken = validToken.substring(0, validToken.length() - 1) + "x";
@@ -102,13 +102,13 @@ class JWTServiceTest {
     }
 
     @Test
-    void extractUserEmail_shouldExtractUserEmail() {
+    void extractUserEmailShouldExtractUserEmail() {
         String token = _jwtService.generateToken(_user);
         assertEquals("test@example.com", _jwtService.extractUserEmail(token));
     }
 
     @Test
-    void extractClaim_shouldReturnCorrectClaim() {
+    void extractClaimShouldReturnCorrectClaim() {
         String token = _jwtService.generateToken(_user);
 
         String extractedEmail = _jwtService.extractClaim(token, Claims::getSubject);

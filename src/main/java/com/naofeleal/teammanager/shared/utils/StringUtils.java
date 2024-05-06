@@ -1,4 +1,4 @@
-package com.naofeleal.teammanager.shared;
+package com.naofeleal.teammanager.shared.utils;
 
 public class StringUtils {
     public static String removeWhiteSpaces(final String value) {

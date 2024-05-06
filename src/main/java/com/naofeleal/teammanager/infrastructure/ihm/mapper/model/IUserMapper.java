@@ -1,17 +1,17 @@
-package com.naofeleal.teammanager.infrastructure.database.mapper;
+package com.naofeleal.teammanager.infrastructure.ihm.mapper.model;
 
 import com.naofeleal.teammanager.core.domain.model.role.RoleEnum;
 import com.naofeleal.teammanager.core.domain.model.user.Email;
 import com.naofeleal.teammanager.core.domain.model.user.Name;
 import com.naofeleal.teammanager.core.domain.model.user.Password;
 import com.naofeleal.teammanager.core.domain.model.user.User;
-import com.naofeleal.teammanager.infrastructure.database.model.account.DBUser;
+import com.naofeleal.teammanager.infrastructure.ihm.model.user.UserDTO;
 import com.naofeleal.teammanager.shared.mapper.IGenericMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-public interface IDBUserMapper extends IGenericMapper<User, DBUser> {
+public interface IUserMapper extends IGenericMapper<User, UserDTO> {
     default String roleToString(RoleEnum role) {
         return role == null ? "" : role.toString();
     }

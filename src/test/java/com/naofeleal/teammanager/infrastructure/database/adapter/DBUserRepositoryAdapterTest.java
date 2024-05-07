@@ -1,6 +1,5 @@
 package com.naofeleal.teammanager.infrastructure.database.adapter;
 
-import com.naofeleal.teammanager.core.domain.model.role.RoleCode;
 import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
 import com.naofeleal.teammanager.core.domain.model.user.Manager;
 import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
@@ -18,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -89,5 +89,22 @@ class DBUserRepositoryAdapterTest {
         assertFalse(result.isPresent());
         verify(userRepository).findByEmail(email);
         verify(userMapper, never()).toDomainModel(any(DBUser.class));
+    }
+
+    @Test
+    void findFreeSimpleUsersShouldReturnSetOfSimpleUsers() {
+        DBUser dbUser2 = new DBUser("Jane", "Smith", "jane.smith@example.com", "password", "SIMPLE_USER");
+        SimpleUser simpleUser2 = new SimpleUser(new Name("Jane"), new Name("Smith"), new Email("jane.smith@example.com"), new Password("password"));
+
+        Set<DBUser> dbUsers = Set.of(dbUser, dbUser2);
+
+        when(userRepository.findUsersWithoutTeamAndWithSimpleUserRole()).thenReturn(dbUsers);
+        when(userMapper.toDomainModel(dbUser)).thenReturn(user);
+        when(userMapper.toDomainModel(dbUser2)).thenReturn(simpleUser2);
+
+        Set<SimpleUser> result = dbUserRepositoryAdapter.findFreeSimpleUsers();
+
+        assertEquals(1, result.size());
+        assertTrue(result.contains(simpleUser2));
     }
 }

@@ -22,4 +22,12 @@ public class Manager extends BaseUser {
     public Manager() {
         super();
     }
+
+    public void addMember(SimpleUser newMember) {
+        this.team.addMember(newMember);
+    }
+
+    public void removeMember(SimpleUser member) {
+        this.team.removeMember(member);
+    }
 }

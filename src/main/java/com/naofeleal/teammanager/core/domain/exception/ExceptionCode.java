@@ -11,6 +11,10 @@ public enum ExceptionCode {
 
     // Role
     UNKNOWN_ROLE("ROLE_001"),
+
+    // Team
+    USER_ALREADY_MEMBER("TEAM_001"),
+    USER_NOT_MEMBER("TEAM_002"),
     ;
 
     private final String _value;

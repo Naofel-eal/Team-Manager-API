@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "_user")
@@ -22,6 +23,10 @@ public class DBUser implements UserDetails {
     public String password;
 
     public String role;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id", nullable = true)
+    public DBTeam team;
 
     public DBUser(String firstname, String lastname, String email, String password, String role) {
         this.firstname = firstname;
@@ -66,5 +71,18 @@ public class DBUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DBUser dbUser = (DBUser) o;
+        return Objects.equals(id, dbUser.id) && Objects.equals(email, dbUser.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email);
     }
 }

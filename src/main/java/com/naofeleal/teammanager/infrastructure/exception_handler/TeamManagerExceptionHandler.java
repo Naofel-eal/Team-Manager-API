@@ -4,10 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.naofeleal.teammanager.core.application.exception.authentication.AlreadyUsedEmailException;
 import com.naofeleal.teammanager.core.application.exception.authentication.EmailNotFoundException;
+import com.naofeleal.teammanager.core.application.exception.authentication.InvalidTokenException;
 import com.naofeleal.teammanager.core.domain.exception.TeamManagerRuntimeException;
 import com.naofeleal.teammanager.core.domain.exception.authentication.InvalidEmailException;
 import com.naofeleal.teammanager.core.domain.exception.authentication.InvalidNameException;
 import com.naofeleal.teammanager.core.domain.exception.authentication.InvalidPasswordException;
+import com.naofeleal.teammanager.infrastructure.database.exception.UnknownRoleException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,9 @@ public class TeamManagerExceptionHandler extends ResponseEntityExceptionHandler 
         httpResponseStatusCodeByException.put(InvalidPasswordException.class, HttpStatus.BAD_REQUEST);
         httpResponseStatusCodeByException.put(InvalidNameException.class, HttpStatus.BAD_REQUEST);
         httpResponseStatusCodeByException.put(EmailNotFoundException.class, HttpStatus.NOT_FOUND);
+        httpResponseStatusCodeByException.put(InvalidTokenException.class, HttpStatus.BAD_REQUEST);
+
+        httpResponseStatusCodeByException.put(UnknownRoleException.class, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {TeamManagerRuntimeException.class})

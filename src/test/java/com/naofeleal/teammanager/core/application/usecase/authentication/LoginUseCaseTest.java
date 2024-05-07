@@ -4,11 +4,12 @@ import com.naofeleal.teammanager.core.application.exception.authentication.Email
 import com.naofeleal.teammanager.core.application.repository.IJWTService;
 import com.naofeleal.teammanager.core.application.repository.IUserRepository;
 import com.naofeleal.teammanager.core.domain.exception.authentication.InvalidPasswordException;
-import com.naofeleal.teammanager.core.domain.model.role.RoleEnum;
-import com.naofeleal.teammanager.core.domain.model.user.Email;
-import com.naofeleal.teammanager.core.domain.model.user.Name;
-import com.naofeleal.teammanager.core.domain.model.user.Password;
-import com.naofeleal.teammanager.core.domain.model.user.User;
+import com.naofeleal.teammanager.core.domain.model.role.RoleCode;
+import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
+import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,16 +38,15 @@ class LoginUseCaseTest {
     @InjectMocks
     private LoginUseCase loginUseCase;
 
-    private User user;
+    private BaseUser user;
 
     @BeforeEach
     void setUp() {
-        user = new User(
+        user = new SimpleUser(
                 new Name("Nao"),
                 new Name("Fel"),
                 new Email("example@gmail.com"),
-                new Password("insecure_password"),
-                RoleEnum.USER
+                new Password("insecure_password")
         );
     }
 
@@ -85,7 +85,7 @@ class LoginUseCaseTest {
 
         verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
         verify(userRepository).findByEmail(email);
-        verify(jwtService, never()).generateToken(any(User.class));
+        verify(jwtService, never()).generateToken(any(BaseUser.class));
     }
 
     @Test
@@ -103,6 +103,6 @@ class LoginUseCaseTest {
 
         verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
         verify(userRepository, never()).findByEmail(anyString());
-        verify(jwtService, never()).generateToken(any(User.class));
+        verify(jwtService, never()).generateToken(any(BaseUser.class));
     }
 }

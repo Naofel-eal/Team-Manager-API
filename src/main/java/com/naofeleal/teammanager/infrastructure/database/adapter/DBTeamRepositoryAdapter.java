@@ -3,7 +3,7 @@ package com.naofeleal.teammanager.infrastructure.database.adapter;
 import com.naofeleal.teammanager.core.application.repository.ITeamRepository;
 import com.naofeleal.teammanager.core.domain.model.team.Team;
 import com.naofeleal.teammanager.infrastructure.database.mapper.IDBTeamMapper;
-import com.naofeleal.teammanager.infrastructure.database.model.account.DBTeam;
+import com.naofeleal.teammanager.infrastructure.database.model.DBTeam;
 import com.naofeleal.teammanager.infrastructure.database.repository.IDBTeamRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,13 +1,14 @@
 package com.naofeleal.teammanager.infrastructure.security.service;
 
 import com.naofeleal.teammanager.core.application.repository.IJWTService;
-import com.naofeleal.teammanager.core.domain.model.role.RoleEnum;
-import com.naofeleal.teammanager.core.domain.model.user.Email;
-import com.naofeleal.teammanager.core.domain.model.user.Name;
-import com.naofeleal.teammanager.core.domain.model.user.Password;
-import com.naofeleal.teammanager.core.domain.model.user.User;
+import com.naofeleal.teammanager.core.domain.model.role.RoleCode;
+import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
+import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
 import com.naofeleal.teammanager.infrastructure.database.mapper.IDBUserMapper;
-import com.naofeleal.teammanager.infrastructure.database.model.account.DBUser;
+import com.naofeleal.teammanager.infrastructure.database.model.DBUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +33,7 @@ class JWTServiceTest {
     private IDBUserMapper _userMapper;
 
     private String _secretKey;
-    private User _user;
+    private BaseUser _user;
     private DBUser _dbUser;
 
     @BeforeEach
@@ -43,21 +44,20 @@ class JWTServiceTest {
                 _secretKey,
                 _userMapper
         );
-        _user = new User(
+        _user = new SimpleUser(
             new Name("Nao"),
             new Name("Fel"),
             new Email("test@example.com"),
-            new Password("insecure_password"),
-            RoleEnum.USER
+            new Password("insecure_password")
         );
         _dbUser = new DBUser(
                 "Nao",
                 "Fel",
                 "test@example.com",
                 "insecure_password",
-                RoleEnum.USER.toString()
+                RoleCode.SIMPLE_USER.toString()
         );
-        when(_userMapper.fromDomainModel(any(User.class))).thenReturn(_dbUser);
+        when(_userMapper.fromDomainModel(any(BaseUser.class))).thenReturn(_dbUser);
     }
 
     @Test

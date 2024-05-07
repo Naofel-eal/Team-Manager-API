@@ -1,13 +1,14 @@
 package com.naofeleal.teammanager.infrastructure.ihm.controller;
 
 import com.naofeleal.teammanager.core.application.usecase.team.interfaces.IFindAllTeamsUseCase;
-import com.naofeleal.teammanager.core.domain.model.role.Manager;
-import com.naofeleal.teammanager.core.domain.model.role.RoleEnum;
+import com.naofeleal.teammanager.core.domain.model.role.ManagerRole;
 import com.naofeleal.teammanager.core.domain.model.team.Team;
-import com.naofeleal.teammanager.core.domain.model.user.Email;
-import com.naofeleal.teammanager.core.domain.model.user.Name;
-import com.naofeleal.teammanager.core.domain.model.user.Password;
-import com.naofeleal.teammanager.core.domain.model.user.User;
+import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
+import com.naofeleal.teammanager.core.domain.model.user.Manager;
+import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
 import com.naofeleal.teammanager.infrastructure.ihm.mapper.model.ITeamMapper;
 import com.naofeleal.teammanager.infrastructure.ihm.model.team.response.FindAllTeamsResponse;
 import com.naofeleal.teammanager.infrastructure.ihm.model.team.response.TeamDTO;
@@ -22,7 +23,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,21 +47,21 @@ class TeamControllerTest {
 
     @BeforeEach
     void setUp() {
-        User user1 = new User(
+        SimpleUser user1 = new SimpleUser(
             new Name("Nao"),
             new Name("Fel"),
             new Email("test@example.com"),
             new Password("insecure_encoded_password")
         );
 
-        User user2 = new User(
+        SimpleUser user2 = new SimpleUser(
                 new Name("Fel"),
                 new Name("Nao"),
                 new Email("test2@example.com"),
                 new Password("insecure_encoded_password")
         );
 
-        User user3 = new User(
+        SimpleUser user3 = new SimpleUser(
                 new Name("No"),
                 new Name("Inspiration"),
                 new Email("test3@example.com"),

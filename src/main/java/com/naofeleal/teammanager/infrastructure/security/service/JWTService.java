@@ -1,9 +1,10 @@
 package com.naofeleal.teammanager.infrastructure.security.service;
 
+import com.naofeleal.teammanager.core.application.exception.authentication.InvalidTokenException;
 import com.naofeleal.teammanager.core.application.repository.IJWTService;
-import com.naofeleal.teammanager.core.domain.model.user.User;
+import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
 import com.naofeleal.teammanager.infrastructure.database.mapper.IDBUserMapper;
-import com.naofeleal.teammanager.infrastructure.database.model.account.DBUser;
+import com.naofeleal.teammanager.infrastructure.database.model.DBUser;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,13 +38,13 @@ public class JWTService implements IJWTService {
         _userMapper = userMapper;
     }
 
-    public String generateToken(User user) {
+    public String generateToken(BaseUser user) {
         return generateToken(new HashMap<>(), user);
     }
 
     public String generateToken(
         Map<String, Object> extraClaims,
-        User user
+        BaseUser user
     ) {
         DBUser userDetails = _userMapper.fromDomainModel(user);
         return Jwts
@@ -74,12 +75,16 @@ public class JWTService implements IJWTService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(_secretKey)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts
+                    .parserBuilder()
+                    .setSigningKey(_secretKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception ex) {
+            throw new InvalidTokenException();
+        }
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {

@@ -4,7 +4,7 @@ import com.naofeleal.teammanager.core.application.exception.authentication.Email
 import com.naofeleal.teammanager.core.application.repository.IJWTService;
 import com.naofeleal.teammanager.core.application.repository.IUserRepository;
 import com.naofeleal.teammanager.core.application.usecase.authentication.interfaces.ILoginUseCase;
-import com.naofeleal.teammanager.core.domain.model.user.User;
+import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ public class LoginUseCase implements ILoginUseCase {
                 password
             )
         );
-        Optional<User> user = _userRepository.findByEmail(email);
+        Optional<BaseUser> user = _userRepository.findByEmail(email);
         if (user.isEmpty()) {
             throw new EmailNotFoundException(email);
         }

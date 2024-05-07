@@ -1,14 +1,14 @@
 package com.naofeleal.teammanager.core.application.usecase.team;
 
 import com.naofeleal.teammanager.core.application.repository.ITeamRepository;
-import com.naofeleal.teammanager.core.domain.model.role.Manager;
+import com.naofeleal.teammanager.core.domain.model.role.ManagerRole;
 import com.naofeleal.teammanager.core.domain.model.team.Team;
-import com.naofeleal.teammanager.core.domain.model.user.Email;
-import com.naofeleal.teammanager.core.domain.model.user.Name;
-import com.naofeleal.teammanager.core.domain.model.user.Password;
-import com.naofeleal.teammanager.core.domain.model.user.User;
-import com.naofeleal.teammanager.infrastructure.ihm.model.team.response.TeamDTO;
-import com.naofeleal.teammanager.infrastructure.ihm.model.user.UserDTO;
+import com.naofeleal.teammanager.core.domain.model.user.Manager;
+import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
+import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,21 +37,21 @@ class FindAllTeamsUseCaseTest {
 
     @BeforeEach
     void setUp() {
-        User user1 = new User(
+        SimpleUser user1 = new SimpleUser(
                 new Name("Nao"),
                 new Name("Fel"),
                 new Email("test@example.com"),
                 new Password("insecure_encoded_password")
         );
 
-        User user2 = new User(
+        SimpleUser user2 = new SimpleUser(
                 new Name("Fel"),
                 new Name("Nao"),
                 new Email("test2@example.com"),
                 new Password("insecure_encoded_password")
         );
 
-        User user3 = new User(
+        SimpleUser user3 = new SimpleUser(
                 new Name("No"),
                 new Name("Inspiration"),
                 new Email("test3@example.com"),

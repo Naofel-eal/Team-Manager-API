@@ -1,4 +1,4 @@
-package com.naofeleal.teammanager.core.domain.model.user;
+package com.naofeleal.teammanager.core.domain.model.user.properties;
 
 import com.naofeleal.teammanager.core.domain.exception.authentication.InvalidNameException;
 import com.naofeleal.teammanager.shared.utils.StringUtils;

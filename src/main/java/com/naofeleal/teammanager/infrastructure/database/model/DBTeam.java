@@ -1,4 +1,4 @@
-package com.naofeleal.teammanager.infrastructure.database.model.account;
+package com.naofeleal.teammanager.infrastructure.database.model;
 
 import jakarta.persistence.*;
 

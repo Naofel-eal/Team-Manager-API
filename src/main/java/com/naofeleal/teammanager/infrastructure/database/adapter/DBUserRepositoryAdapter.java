@@ -1,9 +1,9 @@
 package com.naofeleal.teammanager.infrastructure.database.adapter;
 
 import com.naofeleal.teammanager.core.application.repository.IUserRepository;
-import com.naofeleal.teammanager.core.domain.model.user.User;
+import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
 import com.naofeleal.teammanager.infrastructure.database.mapper.IDBUserMapper;
-import com.naofeleal.teammanager.infrastructure.database.model.account.DBUser;
+import com.naofeleal.teammanager.infrastructure.database.model.DBUser;
 import com.naofeleal.teammanager.infrastructure.database.repository.IDBUserRepository;
 import org.springframework.stereotype.Repository;
 
@@ -23,13 +23,13 @@ public class DBUserRepositoryAdapter implements IUserRepository {
     }
 
     @Override
-    public void register(User user) {
+    public void register(BaseUser user) {
         DBUser dbUser = _userMapper.fromDomainModel(user);
         _userRepository.save(dbUser);
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<BaseUser> findByEmail(String email) {
         final Optional<DBUser> dbUser = _userRepository.findByEmail(email);
         return dbUser.map(_userMapper::toDomainModel);
     }

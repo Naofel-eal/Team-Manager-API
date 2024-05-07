@@ -7,6 +7,10 @@ public enum ExceptionCode {
     ALREADY_USED_EMAIL("AUTH_003"),
     INVALID_NAME("AUTH_004"),
     EMAIL_NOT_FOUND("AUTH_005"),
+    INVALID_TOKEN("INVALID_TOKEN"),
+
+    // Role
+    UNKNOWN_ROLE("ROLE_001"),
     ;
 
     private final String _value;

@@ -1,12 +1,14 @@
 package com.naofeleal.teammanager.infrastructure.database.adapter;
 
-import com.naofeleal.teammanager.core.domain.model.role.RoleEnum;
-import com.naofeleal.teammanager.core.domain.model.user.Email;
-import com.naofeleal.teammanager.core.domain.model.user.Name;
-import com.naofeleal.teammanager.core.domain.model.user.Password;
-import com.naofeleal.teammanager.core.domain.model.user.User;
+import com.naofeleal.teammanager.core.domain.model.role.RoleCode;
+import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
+import com.naofeleal.teammanager.core.domain.model.user.Manager;
+import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
 import com.naofeleal.teammanager.infrastructure.database.mapper.IDBUserMapper;
-import com.naofeleal.teammanager.infrastructure.database.model.account.DBUser;
+import com.naofeleal.teammanager.infrastructure.database.model.DBUser;
 import com.naofeleal.teammanager.infrastructure.database.repository.IDBUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,17 +34,16 @@ class DBUserRepositoryAdapterTest {
     @InjectMocks
     private DBUserRepositoryAdapter dbUserRepositoryAdapter;
 
-    private User user;
+    private BaseUser user;
     private DBUser dbUser;
 
     @BeforeEach
     void setUp() {
-        user = new User(
+        user = new Manager(
                 new Name("Nao"),
                 new Name("Fel"),
                 new Email("example@gmail.com"),
-                new Password("still_unsecure_but_encoded_password"),
-                RoleEnum.MANAGER
+                new Password("still_unsecure_but_encoded_password")
         );
 
         dbUser = new DBUser(
@@ -70,7 +71,7 @@ class DBUserRepositoryAdapterTest {
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(dbUser));
         when(userMapper.toDomainModel(dbUser)).thenReturn(user);
 
-        Optional<User> result = dbUserRepositoryAdapter.findByEmail(email);
+        Optional<BaseUser> result = dbUserRepositoryAdapter.findByEmail(email);
 
         assertTrue(result.isPresent());
         assertEquals(user, result.get());
@@ -83,7 +84,7 @@ class DBUserRepositoryAdapterTest {
         String email = "nonexistent@gmail.com";
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
-        Optional<User> result = dbUserRepositoryAdapter.findByEmail(email);
+        Optional<BaseUser> result = dbUserRepositoryAdapter.findByEmail(email);
 
         assertFalse(result.isPresent());
         verify(userRepository).findByEmail(email);

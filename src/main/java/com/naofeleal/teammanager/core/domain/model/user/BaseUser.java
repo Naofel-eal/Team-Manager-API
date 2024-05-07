@@ -1,15 +1,18 @@
 package com.naofeleal.teammanager.core.domain.model.user;
 
-import com.naofeleal.teammanager.core.domain.model.role.RoleEnum;
+import com.naofeleal.teammanager.core.domain.model.role.BaseRole;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
 
-public class User {
+public abstract class BaseUser {
     public Name firstname;
     public Name lastname;
     public Email email;
     public Password password;
-    public RoleEnum role;
+    public BaseRole role;
 
-    public User(Name firstname, Name lastname, Email email, Password password, RoleEnum role) {
+    public BaseUser(Name firstname, Name lastname, Email email, Password password, BaseRole role) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
@@ -17,15 +20,7 @@ public class User {
         this.role = role;
     }
 
-    public User(Name firstname, Name lastname, Email email, Password password) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.password = password;
-        this.role = RoleEnum.USER;
-    }
-
-    public User(User user) {
+    public BaseUser(BaseUser user) {
         this.firstname = user.firstname;
         this.lastname = user.lastname;
         this.email = user.email;
@@ -33,7 +28,7 @@ public class User {
         this.role = user.role;
     }
 
-    public User() {}
+    public BaseUser() {}
 
     public String getEmail() {
         return email.toString();

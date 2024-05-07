@@ -3,11 +3,12 @@ package com.naofeleal.teammanager.core.application.usecase.authentication;
 import com.naofeleal.teammanager.core.application.exception.authentication.AlreadyUsedEmailException;
 import com.naofeleal.teammanager.core.application.repository.IUserRepository;
 import com.naofeleal.teammanager.core.application.usecase.authentication.dto.RegisterUserDTO;
-import com.naofeleal.teammanager.core.domain.model.role.RoleEnum;
-import com.naofeleal.teammanager.core.domain.model.user.Email;
-import com.naofeleal.teammanager.core.domain.model.user.Name;
-import com.naofeleal.teammanager.core.domain.model.user.Password;
-import com.naofeleal.teammanager.core.domain.model.user.User;
+import com.naofeleal.teammanager.core.domain.model.role.RoleCode;
+import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
+import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +34,7 @@ class RegisterUseCaseTest {
     private RegisterUseCase registerUseCase;
 
     private RegisterUserDTO registerUserDTO;
-    private User user;
+    private BaseUser user;
 
     @BeforeEach
     void setUp() {
@@ -50,17 +51,16 @@ class RegisterUseCaseTest {
 
         verify(userRepository).findByEmail("example@gmail.com");
         verify(passwordEncoder).encode("8AbcDefGh8");
-        verify(userRepository).register(any(User.class));
+        verify(userRepository).register(any(BaseUser.class));
     }
 
     @Test
     void executeShouldThrowAlreadyUsedEmailExceptionForExistingEmail() {
-        user = new User(
+        user = new SimpleUser(
             new Name("Nao"),
             new Name("Fel"),
             new Email("example@gmail.com"),
-            Password.fromRaw("8AbcDefGh8", passwordEncoder::encode),
-            RoleEnum.USER
+            Password.fromRaw("8AbcDefGh8", passwordEncoder::encode)
         );
         when(userRepository.findByEmail("example@gmail.com")).thenReturn(Optional.of(user));
 
@@ -70,7 +70,7 @@ class RegisterUseCaseTest {
         );
 
         verify(userRepository).findByEmail("example@gmail.com");
-        verify(userRepository, never()).register(any(User.class));
+        verify(userRepository, never()).register(any(BaseUser.class));
     }
 
     @Test

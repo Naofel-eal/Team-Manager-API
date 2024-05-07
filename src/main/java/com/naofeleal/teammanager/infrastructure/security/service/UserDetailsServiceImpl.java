@@ -1,7 +1,7 @@
 package com.naofeleal.teammanager.infrastructure.security.service;
 
 import com.naofeleal.teammanager.core.application.exception.authentication.EmailNotFoundException;
-import com.naofeleal.teammanager.infrastructure.database.model.account.DBUser;
+import com.naofeleal.teammanager.infrastructure.database.model.DBUser;
 import com.naofeleal.teammanager.infrastructure.database.repository.IDBUserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

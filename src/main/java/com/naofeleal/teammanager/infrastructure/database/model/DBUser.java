@@ -1,4 +1,4 @@
-package com.naofeleal.teammanager.infrastructure.database.model.account;
+package com.naofeleal.teammanager.infrastructure.database.model;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,6 +20,7 @@ public class DBUser implements UserDetails {
     @Column(unique=true)
     public String email;
     public String password;
+
     public String role;
 
     public DBUser(String firstname, String lastname, String email, String password, String role) {

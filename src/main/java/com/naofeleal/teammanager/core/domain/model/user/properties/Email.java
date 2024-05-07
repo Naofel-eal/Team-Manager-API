@@ -1,4 +1,4 @@
-package com.naofeleal.teammanager.core.domain.model.user;
+package com.naofeleal.teammanager.core.domain.model.user.properties;
 
 public class Email {
     private final String _value;

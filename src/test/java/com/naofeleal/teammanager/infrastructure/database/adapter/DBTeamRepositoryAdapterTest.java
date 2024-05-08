@@ -1,16 +1,16 @@
 package com.naofeleal.teammanager.infrastructure.database.adapter;
 
-import com.naofeleal.teammanager.core.domain.model.role.ManagerRole;
 import com.naofeleal.teammanager.core.domain.model.team.Team;
 import com.naofeleal.teammanager.core.domain.model.user.Manager;
 import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
-import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
 import com.naofeleal.teammanager.infrastructure.database.mapper.IDBTeamMapper;
+import com.naofeleal.teammanager.infrastructure.database.model.DBBaseUser;
+import com.naofeleal.teammanager.infrastructure.database.model.DBManager;
+import com.naofeleal.teammanager.infrastructure.database.model.DBSimpleUser;
 import com.naofeleal.teammanager.infrastructure.database.model.DBTeam;
-import com.naofeleal.teammanager.infrastructure.database.model.DBUser;
 import com.naofeleal.teammanager.infrastructure.database.repository.IDBTeamRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,31 +44,28 @@ class DBTeamRepositoryAdapterTest {
 
     @BeforeEach
     void setUp() {
-        DBUser dbUser1 = new DBUser(
+        DBManager dbBaseUser1 = new DBManager(
             "Nao",
             "Fel",
             "example@gmail.com",
-            "still_unsecure_but_encoded_password",
-            "MANAGER"
+            "still_unsecure_but_encoded_password"
         );
 
-        DBUser dbUser2 = new DBUser(
+        DBSimpleUser dbBaseUser2 = new DBSimpleUser(
             "Fel",
             "Nao",
             "example2@gmail.com",
-            "still_unsecure_but_encoded_password",
-            "USER"
+            "still_unsecure_but_encoded_password"
         );
 
-        DBUser dbUser3 = new DBUser(
+        DBSimpleUser dbBaseUser3 = new DBSimpleUser(
             "No",
             "Inspiration",
             "example3@gmail.com",
-            "still_unsecure_but_encoded_password",
-            "USER"
+            "still_unsecure_but_encoded_password"
         );
 
-        SimpleUser user1 = new SimpleUser(
+        Manager user1 = new Manager(
                 new Name("Nao"),
                 new Name("Fel"),
                 new Email("test@example.com"),
@@ -90,8 +87,8 @@ class DBTeamRepositoryAdapterTest {
         );
 
 
-        _dbTeam = new DBTeam(dbUser1, new ArrayList<>(List.of(dbUser2, dbUser3)));
-        _team = new Team(new Manager(user1), List.of(user2, user3));
+        _dbTeam = new DBTeam(dbBaseUser1, new ArrayList<>(List.of(dbBaseUser2, dbBaseUser3)));
+        _team = new Team(user1, List.of(user2, user3));
     }
 
     @Test

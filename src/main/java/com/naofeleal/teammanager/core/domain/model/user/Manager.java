@@ -7,20 +7,24 @@ import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
 
 public class Manager extends BaseUser {
-    public Team team;
+    public Team team = new Team();
+
+    public Manager(Name firstName, Name lastName, Email email, Password password, Team team) {
+        super(firstName, lastName, email, password, new ManagerRole());
+        this.team = team;
+    }
 
     public Manager(Name firstName, Name lastName, Email email, Password password) {
         super(firstName, lastName, email, password, new ManagerRole());
-        this.team = new Team();
     }
 
     public Manager(SimpleUser simpleUser) {
-        super(simpleUser);
-        this.team = new Team();
+        super(simpleUser.firstname, simpleUser.lastname, simpleUser.email, simpleUser.password, new ManagerRole());
     }
 
     public Manager() {
         super();
+        this.role = new ManagerRole();
     }
 
     public void addMember(SimpleUser newMember) {
@@ -29,5 +33,9 @@ public class Manager extends BaseUser {
 
     public void removeMember(SimpleUser member) {
         this.team.removeMember(member);
+    }
+
+    public SimpleUser downgradeToSimpleUser() {
+        return new SimpleUser(this.firstname, this.lastname, this.email, this.password);
     }
 }

@@ -12,20 +12,20 @@ public class DBTeam {
     public Long id;
 
     @OneToOne
-    public DBUser manager;
+    public DBManager manager;
 
-    @OneToMany
-    public List<DBUser> members;
+    @OneToMany(mappedBy = "team")
+    public List<DBSimpleUser> members;
 
     public DBTeam() {}
 
-    public DBTeam(Long id, DBUser manager, List<DBUser> members) {
+    public DBTeam(Long id, DBManager manager, List<DBSimpleUser> members) {
         this.id = id;
         this.manager = manager;
         this.members = members;
     }
 
-    public DBTeam(DBUser manager, List<DBUser> members) {
+    public DBTeam(DBManager manager, List<DBSimpleUser> members) {
         this.manager = manager;
         this.members = members;
     }

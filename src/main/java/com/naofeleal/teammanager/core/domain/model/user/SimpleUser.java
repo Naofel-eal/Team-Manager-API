@@ -12,7 +12,12 @@ public class SimpleUser extends BaseUser {
         super(firstName, lastName, email, password, new SimpleUserRole());
     }
 
+    public Manager upgradeToManager() {
+        return new Manager(this);
+    }
+
     public SimpleUser() {
         super();
+        this.role = new SimpleUserRole();
     }
 }

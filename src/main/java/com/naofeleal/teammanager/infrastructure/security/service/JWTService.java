@@ -4,7 +4,7 @@ import com.naofeleal.teammanager.core.application.exception.authentication.Inval
 import com.naofeleal.teammanager.core.application.repository.IJWTService;
 import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
 import com.naofeleal.teammanager.infrastructure.database.mapper.IDBUserMapper;
-import com.naofeleal.teammanager.infrastructure.database.model.DBUser;
+import com.naofeleal.teammanager.infrastructure.database.model.DBBaseUser;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,7 +46,7 @@ public class JWTService implements IJWTService {
         Map<String, Object> extraClaims,
         BaseUser user
     ) {
-        DBUser userDetails = _userMapper.fromDomainModel(user);
+        DBBaseUser userDetails = _userMapper.fromDomainModel(user);
         return Jwts
             .builder()
             .setClaims(extraClaims)

@@ -12,5 +12,6 @@ public class Admin extends BaseUser {
 
     public Admin() {
         super();
+        this.role = new AdminRole();
     }
 }

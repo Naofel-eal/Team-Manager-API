@@ -9,38 +9,30 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Table(name = "_user")
-public class DBUser implements UserDetails {
+@MappedSuperclass
+public abstract class DBBaseUser implements UserDetails {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
     public String firstname;
     public String lastname;
 
-    @Column(unique=true)
+    @Column(unique = true)
     public String email;
     public String password;
 
-    public String role;
-
-    @ManyToOne
-    @JoinColumn(name = "team_id", nullable = true)
-    public DBTeam team;
-
-    public DBUser(String firstname, String lastname, String email, String password, String role) {
+    public DBBaseUser(String firstname, String lastname, String email, String password) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
-        this.role = role;
     }
 
-    public DBUser() {}
+    public DBBaseUser() {}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role));
+        return List.of();
     }
 
     @Override
@@ -77,12 +69,15 @@ public class DBUser implements UserDetails {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DBUser dbUser = (DBUser) o;
-        return Objects.equals(id, dbUser.id) && Objects.equals(email, dbUser.email);
+        DBBaseUser dbBaseUser = (DBBaseUser) o;
+        return Objects.equals(id, dbBaseUser.id)
+                && Objects.equals(email, dbBaseUser.email)
+                && Objects.equals(firstname, dbBaseUser.firstname)
+                && Objects.equals(lastname, dbBaseUser.lastname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email);
+        return Objects.hash(id, email, firstname, lastname);
     }
 }

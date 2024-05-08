@@ -1,14 +1,16 @@
 package com.naofeleal.teammanager.infrastructure.database.adapter;
 
 import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
-import com.naofeleal.teammanager.core.domain.model.user.Manager;
 import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
 import com.naofeleal.teammanager.infrastructure.database.mapper.IDBUserMapper;
-import com.naofeleal.teammanager.infrastructure.database.model.DBUser;
-import com.naofeleal.teammanager.infrastructure.database.repository.IDBUserRepository;
+import com.naofeleal.teammanager.infrastructure.database.model.DBBaseUser;
+import com.naofeleal.teammanager.infrastructure.database.model.DBSimpleUser;
+import com.naofeleal.teammanager.infrastructure.database.repository.IDBAdminRepository;
+import com.naofeleal.teammanager.infrastructure.database.repository.IDBManagerRepository;
+import com.naofeleal.teammanager.infrastructure.database.repository.IDBSimpleUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +28,13 @@ import static org.mockito.Mockito.*;
 class DBUserRepositoryAdapterTest {
 
     @Mock
-    private IDBUserRepository userRepository;
+    private IDBSimpleUserRepository simpleUserRepository;
+
+    @Mock
+    private IDBManagerRepository managerRepository;
+
+    @Mock
+    private IDBAdminRepository adminRepository;
 
     @Mock
     private IDBUserMapper userMapper;
@@ -34,24 +42,23 @@ class DBUserRepositoryAdapterTest {
     @InjectMocks
     private DBUserRepositoryAdapter dbUserRepositoryAdapter;
 
-    private BaseUser user;
-    private DBUser dbUser;
+    private SimpleUser user;
+    private DBSimpleUser dbUser;
 
     @BeforeEach
     void setUp() {
-        user = new Manager(
+        user = new SimpleUser(
                 new Name("Nao"),
                 new Name("Fel"),
                 new Email("example@gmail.com"),
                 new Password("still_unsecure_but_encoded_password")
         );
 
-        dbUser = new DBUser(
+        dbUser = new DBSimpleUser(
                 "Nao",
                 "Fel",
                 "example@gmail.com",
-                "still_unsecure_but_encoded_password",
-                "MANAGER"
+                "still_unsecure_but_encoded_password"
         );
     }
 
@@ -62,49 +69,51 @@ class DBUserRepositoryAdapterTest {
         dbUserRepositoryAdapter.register(user);
 
         verify(userMapper).fromDomainModel(user);
-        verify(userRepository).save(dbUser);
+        verify(simpleUserRepository).save(dbUser);
     }
 
     @Test
     void findByEmailShouldReturnUserWhenFound() {
         String email = "example@gmail.com";
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(dbUser));
+        when(simpleUserRepository.findByEmail(email)).thenReturn(Optional.of(dbUser));
         when(userMapper.toDomainModel(dbUser)).thenReturn(user);
 
         Optional<BaseUser> result = dbUserRepositoryAdapter.findByEmail(email);
 
         assertTrue(result.isPresent());
         assertEquals(user, result.get());
-        verify(userRepository).findByEmail(email);
+        verify(simpleUserRepository).findByEmail(email);
         verify(userMapper).toDomainModel(dbUser);
     }
 
     @Test
     void findByEmailShouldReturnEmptyWhenNotFound() {
         String email = "nonexistent@gmail.com";
-        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+        when(simpleUserRepository.findByEmail(email)).thenReturn(Optional.empty());
+        when(managerRepository.findByEmail(email)).thenReturn(Optional.empty());
+        when(adminRepository.findByEmail(email)).thenReturn(Optional.empty());
 
         Optional<BaseUser> result = dbUserRepositoryAdapter.findByEmail(email);
 
         assertFalse(result.isPresent());
-        verify(userRepository).findByEmail(email);
-        verify(userMapper, never()).toDomainModel(any(DBUser.class));
+        verify(simpleUserRepository).findByEmail(email);
+        verify(userMapper, never()).toDomainModel(any(DBBaseUser.class));
     }
 
     @Test
     void findFreeSimpleUsersShouldReturnSetOfSimpleUsers() {
-        DBUser dbUser2 = new DBUser("Jane", "Smith", "jane.smith@example.com", "password", "SIMPLE_USER");
-        SimpleUser simpleUser2 = new SimpleUser(new Name("Jane"), new Name("Smith"), new Email("jane.smith@example.com"), new Password("password"));
+        DBSimpleUser dbBaseUser2 = new DBSimpleUser("Fel", "Nao", "example@gmail.com", "still_unsecure_but_encoded_password");
+        SimpleUser simpleUser2 = new SimpleUser(new Name("Fel"), new Name("Nao"), new Email("example@gmail.com"), new Password("still_unsecure_but_encoded_password"));
 
-        Set<DBUser> dbUsers = Set.of(dbUser, dbUser2);
+        Set<DBBaseUser> dbBaseUsers = Set.of(dbUser, dbBaseUser2);
 
-        when(userRepository.findUsersWithoutTeamAndWithSimpleUserRole()).thenReturn(dbUsers);
+        when(simpleUserRepository.findSimpleUsersWithoutTeam()).thenReturn(dbBaseUsers);
         when(userMapper.toDomainModel(dbUser)).thenReturn(user);
-        when(userMapper.toDomainModel(dbUser2)).thenReturn(simpleUser2);
+        when(userMapper.toDomainModel(dbBaseUser2)).thenReturn(simpleUser2);
 
         Set<SimpleUser> result = dbUserRepositoryAdapter.findFreeSimpleUsers();
 
-        assertEquals(1, result.size());
+        assertEquals(2, result.size());
         assertTrue(result.contains(simpleUser2));
     }
 }

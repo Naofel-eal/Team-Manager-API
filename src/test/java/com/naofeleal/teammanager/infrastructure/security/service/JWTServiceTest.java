@@ -1,14 +1,16 @@
 package com.naofeleal.teammanager.infrastructure.security.service;
 
+import com.naofeleal.teammanager.core.application.exception.authentication.InvalidTokenException;
 import com.naofeleal.teammanager.core.application.repository.IJWTService;
-import com.naofeleal.teammanager.core.domain.model.role.RoleCode;
 import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
 import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
+import com.naofeleal.teammanager.infrastructure.database.mapper.IDBTeamMapper;
 import com.naofeleal.teammanager.infrastructure.database.mapper.IDBUserMapper;
-import com.naofeleal.teammanager.infrastructure.database.model.DBUser;
+import com.naofeleal.teammanager.infrastructure.database.model.DBBaseUser;
+import com.naofeleal.teammanager.infrastructure.database.model.DBSimpleUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,13 +36,13 @@ class JWTServiceTest {
 
     private String _secretKey;
     private BaseUser _user;
-    private DBUser _dbUser;
+    private DBSimpleUser _dbSimpleUser;
 
     @BeforeEach
     void setUp() {
         _secretKey = "secretNotSoSecretsecretNotSoSecretsecretNotSoSecret";
         _jwtService = new JWTService(
-                1000L,
+                10000L,
                 _secretKey,
                 _userMapper
         );
@@ -50,14 +52,13 @@ class JWTServiceTest {
             new Email("test@example.com"),
             new Password("insecure_password")
         );
-        _dbUser = new DBUser(
-                "Nao",
-                "Fel",
-                "test@example.com",
-                "insecure_password",
-                RoleCode.SIMPLE_USER.toString()
+        _dbSimpleUser = new DBSimpleUser(
+            "Nao",
+            "Fel",
+            "test@example.com",
+            "insecure_password"
         );
-        when(_userMapper.fromDomainModel(any(BaseUser.class))).thenReturn(_dbUser);
+        when(_userMapper.fromDomainModel(any(BaseUser.class))).thenReturn(_dbSimpleUser);
     }
 
     @Test
@@ -86,19 +87,19 @@ class JWTServiceTest {
 
     @Test
     void isTokenValidShouldReturnTrueForValidToken() {
-        UserDetails userDetails = _dbUser;
+        UserDetails userDetails = _dbSimpleUser;
         String token = _jwtService.generateToken(_user);
 
         assertTrue(_jwtService.isTokenValid(token, userDetails));
     }
 
     @Test
-    void isTokenValidShouldReturnFalseForInvalidToken() {
-        UserDetails userDetails = _dbUser;
+    void isTokenValidShouldThrowInvalidTokenException() {
+        UserDetails userDetails = _dbSimpleUser;
         String validToken = _jwtService.generateToken(_user);
         String invalidToken = validToken.substring(0, validToken.length() - 1) + "x";
 
-        assertFalse(_jwtService.isTokenValid(invalidToken, userDetails));
+        assertThrows(InvalidTokenException.class, () -> _jwtService.isTokenValid(invalidToken, userDetails));
     }
 
     @Test

@@ -6,6 +6,7 @@ import com.naofeleal.teammanager.core.domain.model.permission.PermissionCode;
 public class SimpleUserRole extends BaseRole {
     public SimpleUserRole() {
         super();
+
     }
 
     @Override

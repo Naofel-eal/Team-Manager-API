@@ -1,14 +1,19 @@
 package com.naofeleal.teammanager.infrastructure.database.adapter;
 
 import com.naofeleal.teammanager.core.application.repository.IUserRepository;
+import com.naofeleal.teammanager.core.domain.model.user.Admin;
 import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
+import com.naofeleal.teammanager.core.domain.model.user.Manager;
 import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
+import com.naofeleal.teammanager.infrastructure.database.mapper.IDBAdminMapper;
+import com.naofeleal.teammanager.infrastructure.database.mapper.IDBManagerMapper;
 import com.naofeleal.teammanager.infrastructure.database.mapper.IDBUserMapper;
-import com.naofeleal.teammanager.infrastructure.database.model.DBBaseUser;
-import com.naofeleal.teammanager.infrastructure.database.model.DBSimpleUser;
+import com.naofeleal.teammanager.infrastructure.database.model.DBAdmin;
+import com.naofeleal.teammanager.infrastructure.database.model.DBManager;
+import com.naofeleal.teammanager.infrastructure.database.model.DBUser;
 import com.naofeleal.teammanager.infrastructure.database.repository.IDBAdminRepository;
 import com.naofeleal.teammanager.infrastructure.database.repository.IDBManagerRepository;
-import com.naofeleal.teammanager.infrastructure.database.repository.IDBSimpleUserRepository;
+import com.naofeleal.teammanager.infrastructure.database.repository.IDBUserRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -17,49 +22,79 @@ import java.util.stream.Collectors;
 
 @Repository
 public class DBUserRepositoryAdapter implements IUserRepository {
-    private final IDBSimpleUserRepository _simpleUserRepository;
+    private final IDBUserRepository _userRepository;
     private final IDBManagerRepository _managerRepository;
     private final IDBAdminRepository _adminRepository;
+    private final IDBManagerMapper _managerMapper;
     private final IDBUserMapper _userMapper;
+    private final IDBAdminMapper _adminMapper;
 
     public DBUserRepositoryAdapter(
-            final IDBSimpleUserRepository userRepository,
+            final IDBUserRepository userRepository,
+            final IDBUserMapper userMapper,
             final IDBManagerRepository managerRepository,
+            final IDBManagerMapper managerMapper,
             final IDBAdminRepository adminRepository,
-            final IDBUserMapper userMapper
+            final IDBAdminMapper adminMapper
     ) {
-        _simpleUserRepository = userRepository;
-        _managerRepository = managerRepository;
-        _adminRepository = adminRepository;
+        _userRepository = userRepository;
         _userMapper = userMapper;
+        _managerRepository = managerRepository;
+        _managerMapper = managerMapper;
+        _adminRepository = adminRepository;
+        _adminMapper = adminMapper;
+    }
+
+    @Override
+    public void delete(BaseUser user) {
+        if (user instanceof SimpleUser)
+            _userRepository.delete(_userMapper.fromDomainModel((SimpleUser) user));
+        else if (user instanceof Manager) {
+            DBManager dbManager = _managerMapper.fromDomainModel((Manager) user);
+            _managerRepository.deleteById(dbManager.id);
+        }
+        else if (user instanceof Admin)
+            _adminRepository.delete(_adminMapper.fromDomainModel((Admin) user));
+    }
+
+    @Override
+    public void save(BaseUser user) {
+        if (user instanceof SimpleUser)
+            _userRepository.save(_userMapper.fromDomainModel((SimpleUser) user));
+        else if (user instanceof Manager) {
+            DBManager dbManager = _managerMapper.fromDomainModel((Manager) user);
+            _managerRepository.save(dbManager);
+        }
+        else if (user instanceof Admin)
+            _adminRepository.save(_adminMapper.fromDomainModel((Admin) user));
     }
 
     @Override
     public void register(BaseUser user) {
-        DBBaseUser dbBaseUser = _userMapper.fromDomainModel(user);
-        _simpleUserRepository.save((DBSimpleUser) dbBaseUser);
+        DBUser dbUser = _userMapper.fromDomainModel((SimpleUser) user);
+        _userRepository.save(dbUser);
     }
 
     @Override
     public Optional<BaseUser> findByEmail(String email) {
-        Optional<? extends DBBaseUser> user = _simpleUserRepository.findByEmail(email);
-        if (user.isEmpty()) {
-            user = _managerRepository.findByEmail(email);
-            if (user.isEmpty()) {
-                user = _adminRepository.findByEmail(email);
-            }
+        Optional<DBUser> user = _userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            Optional<DBManager> manager = _managerRepository.findByUserId(user.get().id);
+            if (manager.isPresent())
+                return manager.map(_managerMapper::toDomainModel);
+
+            Optional<DBAdmin> admin = _adminRepository.findByUserId(user.get().id);
+            if (admin.isPresent())
+                return admin.map(_adminMapper::toDomainModel);
         }
         return user.map(_userMapper::toDomainModel);
     }
 
     @Override
     public Set<SimpleUser> findFreeSimpleUsers() {
-        Set<DBBaseUser> dbBaseUsers = _simpleUserRepository.findSimpleUsersWithoutTeam();
-
-        return dbBaseUsers.stream()
+        Set<DBUser> dbUsers = _userRepository.findSimpleUsersWithoutTeam();
+        return dbUsers.stream()
             .map(_userMapper::toDomainModel)
-            .filter(SimpleUser.class::isInstance)
-            .map(SimpleUser.class::cast)
             .collect(Collectors.toSet());
     }
 }

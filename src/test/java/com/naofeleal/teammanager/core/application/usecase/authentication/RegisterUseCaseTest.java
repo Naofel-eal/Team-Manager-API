@@ -1,9 +1,8 @@
 package com.naofeleal.teammanager.core.application.usecase.authentication;
 
-import com.naofeleal.teammanager.core.application.exception.authentication.AlreadyUsedEmailException;
+import com.naofeleal.teammanager.core.application.exception.user.AlreadyUsedEmailException;
 import com.naofeleal.teammanager.core.application.repository.IUserRepository;
 import com.naofeleal.teammanager.core.application.usecase.authentication.dto.RegisterUserDTO;
-import com.naofeleal.teammanager.core.domain.model.role.RoleCode;
 import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
 import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
@@ -34,7 +33,7 @@ class RegisterUseCaseTest {
     private RegisterUseCase registerUseCase;
 
     private RegisterUserDTO registerUserDTO;
-    private BaseUser user;
+    private SimpleUser user;
 
     @BeforeEach
     void setUp() {
@@ -57,6 +56,7 @@ class RegisterUseCaseTest {
     @Test
     void executeShouldThrowAlreadyUsedEmailExceptionForExistingEmail() {
         user = new SimpleUser(
+                1L,
             new Name("Nao"),
             new Name("Fel"),
             new Email("example@gmail.com"),

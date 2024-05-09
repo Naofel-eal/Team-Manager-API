@@ -1,15 +1,13 @@
 package com.naofeleal.teammanager.core.application.usecase.authentication;
 
-import com.naofeleal.teammanager.core.application.exception.authentication.AlreadyUsedEmailException;
+import com.naofeleal.teammanager.core.application.exception.user.AlreadyUsedEmailException;
 import com.naofeleal.teammanager.core.application.repository.IUserRepository;
 import com.naofeleal.teammanager.core.application.usecase.authentication.dto.RegisterUserDTO;
 import com.naofeleal.teammanager.core.application.usecase.authentication.interfaces.IRegisterUseCase;
-import com.naofeleal.teammanager.core.domain.model.role.RoleCode;
 import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
-import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

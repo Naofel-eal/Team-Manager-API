@@ -89,8 +89,8 @@ class TeamControllerTest {
 
         Manager _manager = new Manager(user1);
 
-        _team = new Team(_manager, new ArrayList<>(List.of(user2, user3)));
-        _teamDTO = new TeamDTO(userDTO1, new ArrayList<>(List.of(userDTO2, userDTO3)));
+        _team = new Team(0L, _manager, new ArrayList<>(List.of(user2, user3)));
+        _teamDTO = new TeamDTO(0L, userDTO1, new ArrayList<>(List.of(userDTO2, userDTO3)));
     }
 
     @Test

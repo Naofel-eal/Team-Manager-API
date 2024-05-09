@@ -7,10 +7,9 @@ import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
 import com.naofeleal.teammanager.infrastructure.database.mapper.IDBTeamMapper;
-import com.naofeleal.teammanager.infrastructure.database.model.DBBaseUser;
 import com.naofeleal.teammanager.infrastructure.database.model.DBManager;
-import com.naofeleal.teammanager.infrastructure.database.model.DBSimpleUser;
 import com.naofeleal.teammanager.infrastructure.database.model.DBTeam;
+import com.naofeleal.teammanager.infrastructure.database.model.DBUser;
 import com.naofeleal.teammanager.infrastructure.database.repository.IDBTeamRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,20 +44,26 @@ class DBTeamRepositoryAdapterTest {
     @BeforeEach
     void setUp() {
         DBManager dbBaseUser1 = new DBManager(
-            "Nao",
-            "Fel",
-            "example@gmail.com",
-            "still_unsecure_but_encoded_password"
+                new DBUser(
+                        1L,
+                    "Nao",
+                    "Fel",
+                    "example@gmail.com",
+                    "still_unsecure_but_encoded_password"
+                ),
+                null
         );
 
-        DBSimpleUser dbBaseUser2 = new DBSimpleUser(
-            "Fel",
-            "Nao",
-            "example2@gmail.com",
-            "still_unsecure_but_encoded_password"
+        DBUser dbBaseUser2 = new DBUser(
+                2L,
+                "Fel",
+                "Nao",
+                "example2@gmail.com",
+                "still_unsecure_but_encoded_password"
         );
 
-        DBSimpleUser dbBaseUser3 = new DBSimpleUser(
+        DBUser dbBaseUser3 = new DBUser(
+                3L,
             "No",
             "Inspiration",
             "example3@gmail.com",

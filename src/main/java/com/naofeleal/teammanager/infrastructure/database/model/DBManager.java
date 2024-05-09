@@ -4,18 +4,28 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "manager")
-@PrimaryKeyJoinColumn(name = "id")
-public class DBManager extends DBBaseUser{
-    @OneToOne(mappedBy = "manager")
+public class DBManager {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Long id;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    public DBUser user;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "team_id")
     public DBTeam team;
 
-    public DBManager(String firstname, String lastname, String email, String password, DBTeam team) {
-        super(firstname, lastname, email, password);
+    public DBManager(Long id, DBUser user, DBTeam team) {
+        this.id = id;
+        this.user = user;
         this.team = team;
     }
 
-    public DBManager(String firstname, String lastname, String email, String password) {
-        super(firstname, lastname, email, password);
+    public DBManager(DBUser user, DBTeam team) {
+        this.user = user;
+        this.team = team;
     }
 
     public DBManager() {}

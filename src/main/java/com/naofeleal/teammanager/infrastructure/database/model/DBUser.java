@@ -2,15 +2,15 @@ package com.naofeleal.teammanager.infrastructure.database.model;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-@MappedSuperclass
-public abstract class DBBaseUser implements UserDetails {
+@Entity
+@Table(name = "users")
+public class DBUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
@@ -21,14 +21,41 @@ public abstract class DBBaseUser implements UserDetails {
     public String email;
     public String password;
 
-    public DBBaseUser(String firstname, String lastname, String email, String password) {
+    @ManyToOne
+    @JoinTable(
+            name = "team_user",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id")
+    )
+    public DBTeam team;
+
+    public DBUser(Long id, String firstname, String lastname, String email, String password, DBTeam team) {
+        this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
+        this.team = team;
     }
 
-    public DBBaseUser() {}
+    public DBUser(Long id, String firstname, String lastname, String email, String password) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.team = null;
+    }
+
+    public DBUser(String firstname, String lastname, String email, String password, DBTeam team) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.team = team;
+    }
+
+    public DBUser() {}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -69,7 +96,7 @@ public abstract class DBBaseUser implements UserDetails {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DBBaseUser dbBaseUser = (DBBaseUser) o;
+        DBUser dbBaseUser = (DBUser) o;
         return Objects.equals(id, dbBaseUser.id)
                 && Objects.equals(email, dbBaseUser.email)
                 && Objects.equals(firstname, dbBaseUser.firstname)

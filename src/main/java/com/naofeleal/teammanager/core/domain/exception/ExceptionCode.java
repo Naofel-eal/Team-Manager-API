@@ -11,11 +11,17 @@ public enum ExceptionCode {
 
     // Role
     UNKNOWN_ROLE("ROLE_001"),
+    UNAUTHORIZED_OPERATION("ROLE_002"),
 
     // Team
     USER_ALREADY_MEMBER("TEAM_001"),
     USER_NOT_MEMBER("TEAM_002"),
+    TEAM_NOT_FOUND("TEAM_003"),
+    USER_CAN_NOT_BE_MEMBER("TEAM_004"),
+    USER_CAN_NOT_BECOME_MANAGER("TEAM_005"),
+    USER_NOT_A_MANAGER("TEAM_006"),
     ;
+
 
     private final String _value;
 

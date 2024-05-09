@@ -4,4 +4,4 @@ import com.naofeleal.teammanager.infrastructure.endpoint.model.user.UserDTO;
 
 import java.util.List;
 
-public record TeamDTO(UserDTO manager, List<UserDTO> members) {}
+public record TeamDTO(Long id, UserDTO manager, List<UserDTO> members) {}

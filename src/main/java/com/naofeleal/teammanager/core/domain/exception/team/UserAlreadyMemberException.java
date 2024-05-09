@@ -5,6 +5,6 @@ import com.naofeleal.teammanager.core.domain.exception.TeamManagerRuntimeExcepti
 
 public class UserAlreadyMemberException extends TeamManagerRuntimeException {
     public UserAlreadyMemberException(String userEmail, String managerEmail) {
-        super(ExceptionCode.USER_ALREADY_MEMBER, userEmail.concat(" already member of the team of ").concat(managerEmail));
+        super(ExceptionCode.USER_ALREADY_MEMBER, userEmail.concat(" is already member of the team of ").concat(managerEmail));
     }
 }

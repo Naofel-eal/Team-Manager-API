@@ -1,4 +1,4 @@
-package com.naofeleal.teammanager.core.application.exception.authentication;
+package com.naofeleal.teammanager.core.application.exception.user;
 
 import com.naofeleal.teammanager.core.domain.exception.ExceptionCode;
 import com.naofeleal.teammanager.core.domain.exception.TeamManagerRuntimeException;

@@ -1,15 +1,25 @@
 package com.naofeleal.teammanager.infrastructure.database.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "admin")
-@PrimaryKeyJoinColumn(name = "id")
-public class DBAdmin extends DBBaseUser {
-    public DBAdmin(String firstname, String lastname, String email, String password) {
-        super(firstname, lastname, email, password);
+public class DBAdmin {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Long id;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    public DBUser user;
+
+    public DBAdmin(Long id, DBUser user) {
+        this.id = id;
+        this.user = user;
+    }
+
+    public DBAdmin(DBUser user) {
+        this.user = user;
     }
 
     public DBAdmin() {}

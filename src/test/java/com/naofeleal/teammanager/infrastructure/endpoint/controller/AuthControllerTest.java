@@ -1,6 +1,6 @@
 package com.naofeleal.teammanager.infrastructure.endpoint.controller;
 
-import com.naofeleal.teammanager.core.application.exception.authentication.AlreadyUsedEmailException;
+import com.naofeleal.teammanager.core.application.exception.user.AlreadyUsedEmailException;
 import com.naofeleal.teammanager.core.application.usecase.authentication.dto.RegisterUserDTO;
 import com.naofeleal.teammanager.core.application.usecase.authentication.interfaces.ILoginUseCase;
 import com.naofeleal.teammanager.core.application.usecase.authentication.interfaces.IRegisterUseCase;

@@ -6,8 +6,13 @@ import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
 
 public class Admin extends BaseUser {
-    public Admin(Name firstName, Name lastName, Email email, Password password) {
-        super(firstName, lastName, email, password, new AdminRole());
+    public Admin(BaseUser user) {
+        super(user);
+        this.role = new AdminRole();
+    }
+
+    public Admin(Name firstname, Name lastname, Email email, Password password) {
+        super(firstname, lastname, email, password, new AdminRole());
     }
 
     public Admin() {

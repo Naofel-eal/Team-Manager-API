@@ -1,10 +1,11 @@
 package com.naofeleal.teammanager.infrastructure.security.service;
 
-import com.naofeleal.teammanager.core.application.exception.authentication.InvalidTokenException;
+import com.naofeleal.teammanager.core.application.exception.user.InvalidTokenException;
 import com.naofeleal.teammanager.core.application.repository.IJWTService;
 import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
+import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
 import com.naofeleal.teammanager.infrastructure.database.mapper.IDBUserMapper;
-import com.naofeleal.teammanager.infrastructure.database.model.DBBaseUser;
+import com.naofeleal.teammanager.infrastructure.database.model.DBUser;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,7 +47,7 @@ public class JWTService implements IJWTService {
         Map<String, Object> extraClaims,
         BaseUser user
     ) {
-        DBBaseUser userDetails = _userMapper.fromDomainModel(user);
+        DBUser userDetails = _userMapper.fromDomainModel(new SimpleUser(user));
         return Jwts
             .builder()
             .setClaims(extraClaims)

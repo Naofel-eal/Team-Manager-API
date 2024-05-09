@@ -1,10 +1,11 @@
 package com.naofeleal.teammanager.core.application.usecase.authentication;
 
-import com.naofeleal.teammanager.core.application.exception.authentication.EmailNotFoundException;
+import com.naofeleal.teammanager.core.application.exception.user.EmailNotFoundException;
 import com.naofeleal.teammanager.core.application.repository.IJWTService;
 import com.naofeleal.teammanager.core.application.repository.IUserRepository;
 import com.naofeleal.teammanager.core.application.usecase.authentication.interfaces.ILoginUseCase;
 import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
+import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;

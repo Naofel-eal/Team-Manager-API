@@ -1,10 +1,9 @@
 package com.naofeleal.teammanager.core.application.usecase.authentication;
 
-import com.naofeleal.teammanager.core.application.exception.authentication.EmailNotFoundException;
+import com.naofeleal.teammanager.core.application.exception.user.EmailNotFoundException;
 import com.naofeleal.teammanager.core.application.repository.IJWTService;
 import com.naofeleal.teammanager.core.application.repository.IUserRepository;
 import com.naofeleal.teammanager.core.domain.exception.authentication.InvalidPasswordException;
-import com.naofeleal.teammanager.core.domain.model.role.RoleCode;
 import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
 import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
@@ -38,11 +37,12 @@ class LoginUseCaseTest {
     @InjectMocks
     private LoginUseCase loginUseCase;
 
-    private BaseUser user;
+    private SimpleUser user;
 
     @BeforeEach
     void setUp() {
         user = new SimpleUser(
+                1L,
                 new Name("Nao"),
                 new Name("Fel"),
                 new Email("example@gmail.com"),
@@ -58,7 +58,7 @@ class LoginUseCaseTest {
 
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
             .thenReturn(mock(UsernamePasswordAuthenticationToken.class));
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        when(userRepository.findByEmail(email)).thenReturn((Optional<SimpleUser>) Optional.of(user));
         when(jwtService.generateToken(user)).thenReturn(expectedJwtToken);
 
         String actualJwtToken = loginUseCase.execute(email, password);

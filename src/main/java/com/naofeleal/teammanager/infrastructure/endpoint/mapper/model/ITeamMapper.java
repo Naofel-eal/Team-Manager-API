@@ -15,6 +15,6 @@ import java.util.List;
     unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface ITeamMapper {
-    TeamDTO fromDomainModels(Team team);
+    TeamDTO fromDomainModel(Team team);
     List<TeamDTO> fromDomainModels(List<Team> teams);
 }

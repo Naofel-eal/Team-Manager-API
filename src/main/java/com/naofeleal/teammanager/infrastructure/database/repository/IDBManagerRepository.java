@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface IDBManagerRepository extends JpaRepository<DBManager, Long> {
-    Optional<DBManager> findByEmail(String email);
+    Optional<DBManager> findByUserId(Long id);
 }

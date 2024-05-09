@@ -10,7 +10,7 @@ public class DBAdmin {
     public Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_admin_user"))
     public DBUser user;
 
     public DBAdmin(Long id, DBUser user) {

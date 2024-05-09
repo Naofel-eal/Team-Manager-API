@@ -1,7 +1,5 @@
 package com.naofeleal.teammanager.infrastructure.database.mapper;
 
-import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
-import com.naofeleal.teammanager.core.domain.model.user.Manager;
 import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Name;

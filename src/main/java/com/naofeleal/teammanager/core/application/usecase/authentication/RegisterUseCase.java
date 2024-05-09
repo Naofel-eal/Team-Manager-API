@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RegisterUseCase implements IRegisterUseCase {
-    private IUserRepository _userRepository;
+    private final IUserRepository _userRepository;
     private final PasswordEncoder _passwordEncoder;
 
     public RegisterUseCase(
@@ -25,17 +25,17 @@ public class RegisterUseCase implements IRegisterUseCase {
     }
 
     @Override
-    public void execute(RegisterUserDTO registerUserDTO) throws AlreadyUsedEmailException {
+    public void execute(String firstname, String lastname, String email, String password) throws AlreadyUsedEmailException {
+        if(this._userRepository.findByEmail(email).isPresent())
+            throw new AlreadyUsedEmailException();
+
         SimpleUser user = new SimpleUser(
-            new Name(registerUserDTO.firstname()),
-            new Name(registerUserDTO.lastname()),
-            new Email(registerUserDTO.email()),
-            Password.fromRaw(registerUserDTO.password(), _passwordEncoder::encode)
+                new Name(firstname),
+                new Name(lastname),
+                new Email(email),
+                Password.fromRaw(password, _passwordEncoder::encode)
         );
 
-        if(this._userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new AlreadyUsedEmailException();
-        }
         this._userRepository.register(user);
     }
 }

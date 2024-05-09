@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+
 @Entity
 @Table(name = "users")
 public class DBUser implements UserDetails {
@@ -29,30 +30,19 @@ public class DBUser implements UserDetails {
     )
     public DBTeam team;
 
-    public DBUser(Long id, String firstname, String lastname, String email, String password, DBTeam team) {
-        this.id = id;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.password = password;
-        this.team = team;
-    }
-
     public DBUser(Long id, String firstname, String lastname, String email, String password) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
-        this.team = null;
     }
 
-    public DBUser(String firstname, String lastname, String email, String password, DBTeam team) {
+    public DBUser(String firstname, String lastname, String email, String password) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
-        this.team = team;
     }
 
     public DBUser() {}

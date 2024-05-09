@@ -1,7 +1,6 @@
 package com.naofeleal.teammanager.infrastructure.database.model;
 
 import jakarta.persistence.*;
-import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +9,6 @@ import java.util.List;
 @Table(name = "team")
 public class DBTeam {
     @Id
-    @NonNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long id;
 

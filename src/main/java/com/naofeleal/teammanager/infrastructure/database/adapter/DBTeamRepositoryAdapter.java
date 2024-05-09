@@ -33,7 +33,6 @@ public class DBTeamRepositoryAdapter implements ITeamRepository {
     @Override
     public List<Team> findAllTeams() {
         final List<DBTeam> dbTeams = _teamRepository.findAll();
-        final Manager manager = _managerMapper.toDomainModel(dbTeams.getFirst().manager);
         return _teamMapper.toDomainModels(dbTeams);
     }
 

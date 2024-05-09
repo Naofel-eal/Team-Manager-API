@@ -3,9 +3,7 @@ package com.naofeleal.teammanager.infrastructure.endpoint.controller;
 import com.naofeleal.teammanager.core.application.usecase.authentication.dto.RegisterUserDTO;
 import com.naofeleal.teammanager.core.application.usecase.authentication.interfaces.ILoginUseCase;
 import com.naofeleal.teammanager.core.application.usecase.authentication.interfaces.IRegisterUseCase;
-import com.naofeleal.teammanager.infrastructure.endpoint.mapper.authentication.IRegisterMapper;
 import com.naofeleal.teammanager.infrastructure.endpoint.model.authentication.request.AuthenticationRequest;
-import com.naofeleal.teammanager.infrastructure.endpoint.model.authentication.request.RegisterRequest;
 import com.naofeleal.teammanager.infrastructure.endpoint.model.authentication.response.AuthenticationResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -20,20 +18,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final IRegisterUseCase _registerUseCase;
     private final ILoginUseCase _loginUseCase;
-    private final IRegisterMapper _registerMapper;
 
-    public AuthController(IRegisterUseCase registerUseCase, ILoginUseCase loginUseCase, IRegisterMapper registerMapper) {
+    public AuthController(IRegisterUseCase registerUseCase, ILoginUseCase loginUseCase) {
         this._registerUseCase = registerUseCase;
         this._loginUseCase = loginUseCase;
-        this._registerMapper = registerMapper;
     }
 
     @PostMapping("/register")
     public ResponseEntity<Void> register(
-        @Valid @RequestBody RegisterRequest request
+        @Valid @RequestBody RegisterUserDTO registerUserDTO
     ) {
-        RegisterUserDTO registerUserDTO = _registerMapper.toDomain(request);
-        _registerUseCase.execute(registerUserDTO);
+        _registerUseCase.execute(
+                registerUserDTO.firstname(),
+                registerUserDTO.lastname(),
+                registerUserDTO.email(),
+                registerUserDTO.password()
+        );
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

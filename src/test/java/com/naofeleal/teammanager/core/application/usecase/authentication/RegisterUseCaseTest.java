@@ -46,7 +46,12 @@ class RegisterUseCaseTest {
     void executeShouldRegisterUserForNewEmail() {
         when(userRepository.findByEmail("example@gmail.com")).thenReturn(Optional.empty());
 
-        registerUseCase.execute(registerUserDTO);
+        registerUseCase.execute(
+                registerUserDTO.firstname(),
+                registerUserDTO.lastname(),
+                registerUserDTO.email(),
+                registerUserDTO.password()
+        );
 
         verify(userRepository).findByEmail("example@gmail.com");
         verify(passwordEncoder).encode("8AbcDefGh8");
@@ -66,7 +71,12 @@ class RegisterUseCaseTest {
 
         assertThrows(
                 AlreadyUsedEmailException.class,
-                () -> registerUseCase.execute(registerUserDTO)
+                () -> registerUseCase.execute(
+                        registerUserDTO.firstname(),
+                        registerUserDTO.lastname(),
+                        registerUserDTO.email(),
+                        registerUserDTO.password()
+                )
         );
 
         verify(userRepository).findByEmail("example@gmail.com");
@@ -77,7 +87,12 @@ class RegisterUseCaseTest {
     void executeShouldRegisterUserWithEncodedPassword() {
         when(userRepository.findByEmail("example@gmail.com")).thenReturn(Optional.empty());
 
-        registerUseCase.execute(registerUserDTO);
+        registerUseCase.execute(
+                registerUserDTO.firstname(),
+                registerUserDTO.lastname(),
+                registerUserDTO.email(),
+                registerUserDTO.password()
+        );
 
         verify(userRepository).findByEmail("example@gmail.com");
         verify(passwordEncoder).encode("8AbcDefGh8");

@@ -1,6 +1,7 @@
 package com.naofeleal.teammanager.infrastructure.database.adapter;
 
 import com.naofeleal.teammanager.core.application.repository.IUserRepository;
+import com.naofeleal.teammanager.core.domain.model.role.RoleCode;
 import com.naofeleal.teammanager.core.domain.model.user.Admin;
 import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
 import com.naofeleal.teammanager.core.domain.model.user.Manager;
@@ -47,14 +48,17 @@ public class DBUserRepositoryAdapter implements IUserRepository {
 
     @Override
     public void delete(BaseUser user) {
-        if (user instanceof SimpleUser)
-            _userRepository.delete(_userMapper.fromDomainModel((SimpleUser) user));
-        else if (user instanceof Manager) {
-            DBManager dbManager = _managerMapper.fromDomainModel((Manager) user);
-            _managerRepository.deleteById(dbManager.id);
-        }
-        else if (user instanceof Admin)
-            _adminRepository.delete(_adminMapper.fromDomainModel((Admin) user));
+        DBUser dbUser = null;
+
+        if (user.getRole().equals(RoleCode.SIMPLE_USER.toString()))
+            dbUser = _userMapper.fromDomainModel((SimpleUser) user);
+        else if (user.getRole().equals(RoleCode.MANAGER.toString()))
+            dbUser = _managerMapper.fromDomainModel((Manager) user).user;
+        else if (user.getRole().equals(RoleCode.ADMIN.toString()))
+            dbUser = _adminMapper.fromDomainModel((Admin) user).user;
+
+        if (dbUser != null)
+            _userRepository.deleteById(dbUser.id);
     }
 
     @Override

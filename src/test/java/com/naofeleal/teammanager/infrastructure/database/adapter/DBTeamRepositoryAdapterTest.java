@@ -6,11 +6,13 @@ import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
+import com.naofeleal.teammanager.infrastructure.database.mapper.IDBManagerMapper;
 import com.naofeleal.teammanager.infrastructure.database.mapper.IDBTeamMapper;
 import com.naofeleal.teammanager.infrastructure.database.model.DBManager;
 import com.naofeleal.teammanager.infrastructure.database.model.DBTeam;
 import com.naofeleal.teammanager.infrastructure.database.model.DBUser;
 import com.naofeleal.teammanager.infrastructure.database.repository.IDBTeamRepository;
+import com.naofeleal.teammanager.infrastructure.database.repository.IDBUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,11 +21,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,6 +33,9 @@ class DBTeamRepositoryAdapterTest {
 
     @Mock
     private IDBTeamRepository _teamRepository;
+
+    @Mock
+    private IDBUserRepository _userRepository;
 
     @Mock
     private IDBTeamMapper _teamMapper;

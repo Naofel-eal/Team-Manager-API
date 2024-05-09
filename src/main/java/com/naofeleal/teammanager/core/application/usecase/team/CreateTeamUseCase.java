@@ -21,17 +21,14 @@ import java.util.Optional;
 @Service
 public class CreateTeamUseCase implements ICreateTeamUseCase {
     private final IUserRepository _userRepository;
-    private final ITeamRepository _teamRepository;
     private final ICanCreateTeamUseCase _canCreateTeamUseCase;
 
     public CreateTeamUseCase(
             IUserRepository userRepository,
-            ICanCreateTeamUseCase canCreateTeamUseCase,
-            ITeamRepository teamRepository
+            ICanCreateTeamUseCase canCreateTeamUseCase
     ) {
         this._userRepository = userRepository;
         this._canCreateTeamUseCase = canCreateTeamUseCase;
-        this._teamRepository = teamRepository;
     }
 
     @Override
@@ -49,7 +46,6 @@ public class CreateTeamUseCase implements ICreateTeamUseCase {
 
         Manager manager = ((SimpleUser) optFutureManager.get()).upgradeToManager();
         manager.team = new Team(manager);
-        //this._teamRepository.save(manager.team);
         this._userRepository.save(manager);
     }
 }

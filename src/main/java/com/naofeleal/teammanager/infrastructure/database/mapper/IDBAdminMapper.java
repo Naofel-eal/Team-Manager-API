@@ -33,8 +33,7 @@ public interface IDBAdminMapper extends IGenericMapper<Admin, DBAdmin> {
                 admin.firstname.toString(),
                 admin.lastname.toString(),
                 admin.email.toString(),
-                admin.password.toString(),
-                null
+                admin.password.toString()
         );
         return new DBAdmin(dbUser);
     }

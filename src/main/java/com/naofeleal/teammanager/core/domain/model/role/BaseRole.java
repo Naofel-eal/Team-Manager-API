@@ -12,9 +12,6 @@ public abstract class BaseRole {
     public BaseRole() {}
 
     public boolean hasPermission(PermissionCode permissionCode) {
-        for (Permission permission : this.getPermissions()) {
-            System.out.println(permission.code);
-        }
         return getPermissions().stream().anyMatch(permission -> permission.code.equals(permissionCode));
     }
 

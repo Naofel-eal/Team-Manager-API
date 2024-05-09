@@ -58,7 +58,7 @@ class LoginUseCaseTest {
 
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
             .thenReturn(mock(UsernamePasswordAuthenticationToken.class));
-        when(userRepository.findByEmail(email)).thenReturn((Optional<SimpleUser>) Optional.of(user));
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
         when(jwtService.generateToken(user)).thenReturn(expectedJwtToken);
 
         String actualJwtToken = loginUseCase.execute(email, password);

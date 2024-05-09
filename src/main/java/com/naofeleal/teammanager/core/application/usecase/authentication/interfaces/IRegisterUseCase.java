@@ -3,5 +3,5 @@ package com.naofeleal.teammanager.core.application.usecase.authentication.interf
 import com.naofeleal.teammanager.core.application.usecase.authentication.dto.RegisterUserDTO;
 
 public interface IRegisterUseCase {
-    void execute(RegisterUserDTO registerUserDTO);
+    void execute(String firstName, String lastName, String email, String password);
 }

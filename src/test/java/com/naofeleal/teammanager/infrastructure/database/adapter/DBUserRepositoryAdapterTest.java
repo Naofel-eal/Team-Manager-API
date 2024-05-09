@@ -1,11 +1,14 @@
 package com.naofeleal.teammanager.infrastructure.database.adapter;
 
+import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
 import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
 import com.naofeleal.teammanager.infrastructure.database.mapper.IDBUserMapper;
 import com.naofeleal.teammanager.infrastructure.database.model.DBUser;
+import com.naofeleal.teammanager.infrastructure.database.repository.IDBAdminRepository;
+import com.naofeleal.teammanager.infrastructure.database.repository.IDBManagerRepository;
 import com.naofeleal.teammanager.infrastructure.database.repository.IDBUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +28,12 @@ class DBUserRepositoryAdapterTest {
 
     @Mock
     private IDBUserRepository userRepository;
+
+    @Mock
+    private IDBManagerRepository managerRepository;
+
+    @Mock
+    private IDBAdminRepository adminRepository;
 
     @Mock
     private IDBUserMapper userMapper;
@@ -68,9 +77,11 @@ class DBUserRepositoryAdapterTest {
     void findByEmailShouldReturnUserWhenFound() {
         String email = "example@gmail.com";
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(dbUser));
+        when(managerRepository.findByUserId(dbUser.id)).thenReturn(Optional.empty());
+        when(adminRepository.findByUserId(dbUser.id)).thenReturn(Optional.empty());
         when(userMapper.toDomainModel(dbUser)).thenReturn(user);
 
-        Optional<SimpleUser> result = dbUserRepositoryAdapter.findByEmail(email);
+        Optional<BaseUser> result =  dbUserRepositoryAdapter.findByEmail(email);
 
         assertTrue(result.isPresent());
         assertEquals(user, result.get());
@@ -83,7 +94,7 @@ class DBUserRepositoryAdapterTest {
         String email = "nonexistent@gmail.com";
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
-        Optional<SimpleUser> result = dbUserRepositoryAdapter.findByEmail(email);
+        Optional<BaseUser> result = dbUserRepositoryAdapter.findByEmail(email);
 
         assertFalse(result.isPresent());
         verify(userRepository).findByEmail(email);

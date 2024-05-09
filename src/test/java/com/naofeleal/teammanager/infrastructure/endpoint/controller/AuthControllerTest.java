@@ -4,9 +4,7 @@ import com.naofeleal.teammanager.core.application.exception.user.AlreadyUsedEmai
 import com.naofeleal.teammanager.core.application.usecase.authentication.dto.RegisterUserDTO;
 import com.naofeleal.teammanager.core.application.usecase.authentication.interfaces.ILoginUseCase;
 import com.naofeleal.teammanager.core.application.usecase.authentication.interfaces.IRegisterUseCase;
-import com.naofeleal.teammanager.infrastructure.endpoint.mapper.authentication.IRegisterMapper;
 import com.naofeleal.teammanager.infrastructure.endpoint.model.authentication.request.AuthenticationRequest;
-import com.naofeleal.teammanager.infrastructure.endpoint.model.authentication.request.RegisterRequest;
 import com.naofeleal.teammanager.infrastructure.endpoint.model.authentication.response.AuthenticationResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,39 +27,50 @@ class AuthControllerTest {
     @Mock
     private ILoginUseCase loginUseCase;
 
-    @Mock
-    private IRegisterMapper registerMapper;
-
     @InjectMocks
     private AuthController authController;
 
     @Test
     void registerShouldSuccess() {
-        RegisterRequest registerRequest = new RegisterRequest("newuser@example.com", "password123", "John", "Doe");
         RegisterUserDTO registerUserDTO = new RegisterUserDTO("newuser@example.com", "password123", "John", "Doe");
 
-        when(registerMapper.toDomain(any(RegisterRequest.class))).thenReturn(registerUserDTO);
-        doNothing().when(registerUseCase).execute(any(RegisterUserDTO.class));
+        doNothing().when(registerUseCase).execute(
+                any(String.class),
+                any(String.class),
+                any(String.class),
+                any(String.class)
+        );
 
-        ResponseEntity<Void> response = authController.register(registerRequest);
+        ResponseEntity<Void> response = authController.register(registerUserDTO);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        verify(registerMapper, times(1)).toDomain(registerRequest);
-        verify(registerUseCase, times(1)).execute(registerUserDTO);
+        verify(registerUseCase, times(1)).execute(
+                registerUserDTO.firstname(),
+                registerUserDTO.lastname(),
+                registerUserDTO.email(),
+                registerUserDTO.password()
+        );
     }
 
     @Test
     void registerShouldFail() {
-        RegisterRequest registerRequest = new RegisterRequest("newuser@example.com", "password123", "John", "Doe");
         RegisterUserDTO registerUserDTO = new RegisterUserDTO("newuser@example.com", "password123", "John", "Doe");
 
-        when(registerMapper.toDomain(any(RegisterRequest.class))).thenReturn(registerUserDTO);
-        doThrow(AlreadyUsedEmailException.class).when(registerUseCase).execute(any(RegisterUserDTO.class));
+        doThrow(AlreadyUsedEmailException.class).when(registerUseCase).execute(
+                any(String.class),
+                any(String.class),
+                any(String.class),
+                any(String.class)
+        );
 
-        assertThrows(AlreadyUsedEmailException.class, () -> authController.register(registerRequest));
+        assertThrows(AlreadyUsedEmailException.class, () -> authController.register(registerUserDTO));
 
-        verify(registerMapper, times(1)).toDomain(registerRequest);
-        verify(registerUseCase, times(1)).execute(registerUserDTO);
+        verify(registerUseCase, times(1)).execute(
+                registerUserDTO.firstname(),
+                registerUserDTO.lastname(),
+                registerUserDTO.email(),
+                registerUserDTO.password()
+        );
     }
 
     @Test

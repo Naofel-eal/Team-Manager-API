@@ -4,5 +4,5 @@ import com.naofeleal.teammanager.core.domain.model.team.Team;
 import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
 
 public interface IAddMemberUseCase {
-    Team execute(BaseUser user, Long teamId, String userEmail);
+    Team execute(BaseUser user, String managerEmail, String userEmail);
 }

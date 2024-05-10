@@ -28,8 +28,6 @@ import java.util.Map;
 public class TeamManagerExceptionHandler extends ResponseEntityExceptionHandler {
     private final Map<Class<? extends TeamManagerRuntimeException>, HttpStatus> httpResponseStatusCodeByException = new HashMap<>();
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     public TeamManagerExceptionHandler() {
         httpResponseStatusCodeByException.put(AlreadyUsedEmailException.class, HttpStatus.CONFLICT);
         httpResponseStatusCodeByException.put(InvalidEmailException.class, HttpStatus.BAD_REQUEST);

@@ -53,30 +53,30 @@ public class TeamController {
         return ResponseEntity.ok(response);
     }
 
-    @PatchMapping("/{teamId}/members/{userEmail}")
+    @PatchMapping("/{managerEmail}/members/{userEmail}")
     public ResponseEntity<TeamDTO> addMemberToTeam(
-            @PathVariable Long teamId,
-            @PathVariable String userEmail
-    ) {
-        BaseUser user = _userDetailsService.getLoggedUser();
-
-        Team team = this._addMemberUseCase.execute(user, teamId, userEmail);
-        TeamDTO teamDTO = this._teamMapper.fromDomainModel(team);
-        return ResponseEntity.ok(teamDTO);
-    }
-
-    @DeleteMapping("/{teamId}/members/{userEmail}")
-    public ResponseEntity<TeamDTO> removeMemberFromTeam(
-            @PathVariable Long teamId,
+            @PathVariable String managerEmail,
             @PathVariable String userEmail
     ) {
         BaseUser initiator = _userDetailsService.getLoggedUser();
-        Team team = this._removeMemberUseCase.execute(initiator, teamId, userEmail);
+
+        Team team = this._addMemberUseCase.execute(initiator, managerEmail, userEmail);
         TeamDTO teamDTO = this._teamMapper.fromDomainModel(team);
         return ResponseEntity.ok(teamDTO);
     }
 
-    @PostMapping("/add/{futureManagerEmail}")
+    @DeleteMapping("/{managerEmail}/members/{userEmail}")
+    public ResponseEntity<TeamDTO> removeMemberFromTeam(
+            @PathVariable String managerEmail,
+            @PathVariable String userEmail
+    ) {
+        BaseUser initiator = _userDetailsService.getLoggedUser();
+        Team team = this._removeMemberUseCase.execute(initiator, managerEmail, userEmail);
+        TeamDTO teamDTO = this._teamMapper.fromDomainModel(team);
+        return ResponseEntity.ok(teamDTO);
+    }
+
+    @PostMapping("/create/{futureManagerEmail}")
     public ResponseEntity<Void> createTeam(@PathVariable String futureManagerEmail) {
         BaseUser initiator = _userDetailsService.getLoggedUser();
         this._createTeamUseCase.execute(initiator, futureManagerEmail);

@@ -96,7 +96,7 @@ public class DBUserRepositoryAdapter implements IUserRepository {
 
     @Override
     public Set<SimpleUser> findFreeSimpleUsers() {
-        Set<DBUser> dbUsers = _userRepository.findSimpleUsersWithoutTeam();
+        Set<DBUser> dbUsers = _userRepository.findByTeamIsNullAndAdminIsNullAndManagerIsNull();
         return dbUsers.stream()
             .map(_userMapper::toDomainModel)
             .collect(Collectors.toSet());

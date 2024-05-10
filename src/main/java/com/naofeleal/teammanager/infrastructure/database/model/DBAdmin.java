@@ -10,7 +10,10 @@ public class DBAdmin {
     public Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_admin_user"))
+    @JoinColumn(
+            name = "user_id",
+            foreignKey = @ForeignKey(name = "fk_admin_user", foreignKeyDefinition = "FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE")
+    )
     public DBUser user;
 
     public DBAdmin(Long id, DBUser user) {

@@ -1,9 +1,6 @@
 package com.naofeleal.teammanager.infrastructure.database.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 @Entity
 @Table(name = "manager")
 public class DBManager {
@@ -12,7 +9,10 @@ public class DBManager {
     public Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(
+            name = "user_id",
+            foreignKey = @ForeignKey(name = "fk_user_manager", foreignKeyDefinition = "FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE")
+    )
     public DBUser user;
 
     @OneToOne(cascade = CascadeType.ALL)

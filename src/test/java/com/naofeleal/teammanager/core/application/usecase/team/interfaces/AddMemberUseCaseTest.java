@@ -9,6 +9,7 @@ import com.naofeleal.teammanager.core.application.usecase.permission.interfaces.
 import com.naofeleal.teammanager.core.application.usecase.team.AddMemberUseCase;
 import com.naofeleal.teammanager.core.domain.exception.team.UserAlreadyMemberException;
 import com.naofeleal.teammanager.core.domain.model.team.Team;
+import com.naofeleal.teammanager.core.domain.model.user.Admin;
 import com.naofeleal.teammanager.core.domain.model.user.Manager;
 import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
 import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
@@ -42,6 +43,7 @@ class AddMemberUseCaseTest {
 
     private Team mockTeam;
     private SimpleUser mockUser;
+    private Admin initiator;
 
     @BeforeEach
     void setUp() {
@@ -51,6 +53,14 @@ class AddMemberUseCaseTest {
                 new Email("test@example.com"),
                 new Password("insecure_encoded_password")
         );
+
+        Admin admin = new Admin(
+                new Name("Admin"),
+                new Name("Admin"),
+                new Email("Admin@example.com"),
+                new Password("insecure_encoded_password")
+        );
+
         mockTeam = new Team(1L, manager, new ArrayList<>());
         mockUser = new SimpleUser(
                 new Name("Fel"),
@@ -66,7 +76,7 @@ class AddMemberUseCaseTest {
         when(teamRepository.save(mockTeam)).thenReturn(mockTeam);
         when(canAddMemberToATeamUseCase.execute(mockTeam.manager, mockTeam)).thenReturn(true);
 
-        Team result = addMemberUseCase.execute(mockTeam.manager, 1L, "test2@example.com");
+        Team result = addMemberUseCase.execute(initiator, mockTeam.manager.getEmail(), "test2@example.com");
 
         assertEquals(1L, result.id);
         assertEquals(1, result.members.size());
@@ -91,7 +101,7 @@ class AddMemberUseCaseTest {
         when(userRepository.findByEmail("test2@example.com")).thenReturn(Optional.of(userCopy));
         when(canAddMemberToATeamUseCase.execute(mockTeam.manager, mockTeam)).thenReturn(true);
 
-        assertThrows(UserAlreadyMemberException.class, () -> addMemberUseCase.execute(mockTeam.manager, 1L, "test2@example.com"));
+        assertThrows(UserAlreadyMemberException.class, () -> addMemberUseCase.execute(initiator, mockTeam.manager.getEmail(), "test2@example.com"));
 
         verify(teamRepository, times(1)).findById(1L);
         verify(userRepository, times(1)).findByEmail("test2@example.com");
@@ -102,7 +112,7 @@ class AddMemberUseCaseTest {
     void addMemberToNonExistingTeamThrowsTeamNotFoundException() {
         when(teamRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(TeamNotFoundException.class, () -> addMemberUseCase.execute(mockTeam.manager, 1L, "test2@example.com"));
+        assertThrows(TeamNotFoundException.class, () -> addMemberUseCase.execute(initiator, mockTeam.manager.getEmail(), "test2@example.com"));
 
         verify(teamRepository, times(1)).findById(1L);
         verify(userRepository, never()).findByEmail(anyString());
@@ -114,7 +124,7 @@ class AddMemberUseCaseTest {
         when(userRepository.findByEmail("test2@example.com")).thenReturn(Optional.empty());
         when(canAddMemberToATeamUseCase.execute(mockTeam.manager, mockTeam)).thenReturn(true);
 
-        assertThrows(EmailNotFoundException.class, () -> addMemberUseCase.execute(mockTeam.manager,1L, "test2@example.com"));
+        assertThrows(EmailNotFoundException.class, () -> addMemberUseCase.execute(initiator, mockTeam.manager.getEmail(), "test2@example.com"));
 
         verify(teamRepository, times(1)).findById(1L);
         verify(userRepository, times(1)).findByEmail("test2@example.com");
@@ -125,6 +135,6 @@ class AddMemberUseCaseTest {
         when(teamRepository.findById(1L)).thenReturn(Optional.of(mockTeam));
         when(canAddMemberToATeamUseCase.execute(mockUser, mockTeam)).thenReturn(false);
 
-        assertThrows(UnauthorizedOperationException.class, () -> addMemberUseCase.execute(mockUser,1L, "test2@example.com"));
+        assertThrows(UnauthorizedOperationException.class, () -> addMemberUseCase.execute(initiator, mockUser.getEmail(), "test2@example.com"));
     }
 }

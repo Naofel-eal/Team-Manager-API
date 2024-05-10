@@ -48,17 +48,7 @@ public class DBUserRepositoryAdapter implements IUserRepository {
 
     @Override
     public void delete(BaseUser user) {
-        DBUser dbUser = null;
-
-        if (user.getRole().equals(RoleCode.SIMPLE_USER.toString()))
-            dbUser = _userMapper.fromDomainModel((SimpleUser) user);
-        else if (user.getRole().equals(RoleCode.MANAGER.toString()))
-            dbUser = _managerMapper.fromDomainModel((Manager) user).user;
-        else if (user.getRole().equals(RoleCode.ADMIN.toString()))
-            dbUser = _adminMapper.fromDomainModel((Admin) user).user;
-
-        if (dbUser != null)
-            _userRepository.deleteById(dbUser.id);
+        _userRepository.deleteById(user.id);
     }
 
     @Override

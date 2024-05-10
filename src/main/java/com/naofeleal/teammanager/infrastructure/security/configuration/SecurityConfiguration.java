@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -33,7 +33,15 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> {}) // Activer CORS
+                .cors(cors -> cors.configurationSource(request -> {
+                    var corsConfig = new org.springframework.web.cors.CorsConfiguration();
+                    corsConfig.setAllowedOriginPatterns(List.of("http://localhost:4200")); // Remplacez par l'origine réelle
+                    corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+                    corsConfig.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+                    corsConfig.setExposedHeaders(List.of("Authorization"));
+                    corsConfig.setAllowCredentials(true);
+                    return corsConfig;
+                }))
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/**")
                         .permitAll()
@@ -53,11 +61,11 @@ public class SecurityConfiguration {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("*") // Autoriser toutes les origines
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*") // Autoriser tous les en-têtes
+                        .allowedOriginPatterns("http://localhost:4200") // Remplacez par l'origine réelle
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                        .allowedHeaders("*")
                         .exposedHeaders("Authorization")
-                        .allowCredentials(false);
+                        .allowCredentials(true);
             }
         };
     }

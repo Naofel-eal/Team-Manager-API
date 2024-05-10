@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "admin")
 public class DBAdmin {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
     @OneToOne

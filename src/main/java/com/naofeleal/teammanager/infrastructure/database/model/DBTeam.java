@@ -9,7 +9,7 @@ import java.util.List;
 @Table(name = "team")
 public class DBTeam {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
     @OneToOne(mappedBy = "team", cascade = CascadeType.PERSIST, orphanRemoval = true)

@@ -1,8 +1,6 @@
 package com.naofeleal.teammanager.infrastructure.database.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,7 +13,7 @@ import java.util.Objects;
 @Table(name = "users")
 public class DBUser implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
     public String firstname;
     public String lastname;

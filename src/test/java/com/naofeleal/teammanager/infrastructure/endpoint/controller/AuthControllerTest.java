@@ -1,9 +1,16 @@
 package com.naofeleal.teammanager.infrastructure.endpoint.controller;
 
 import com.naofeleal.teammanager.core.application.exception.user.AlreadyUsedEmailException;
+import com.naofeleal.teammanager.core.application.repository.IUserRepository;
 import com.naofeleal.teammanager.core.application.usecase.authentication.dto.RegisterUserDTO;
 import com.naofeleal.teammanager.core.application.usecase.authentication.interfaces.ILoginUseCase;
 import com.naofeleal.teammanager.core.application.usecase.authentication.interfaces.IRegisterUseCase;
+import com.naofeleal.teammanager.core.domain.model.user.BaseUser;
+import com.naofeleal.teammanager.core.domain.model.user.SimpleUser;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Email;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Name;
+import com.naofeleal.teammanager.core.domain.model.user.properties.Password;
+import com.naofeleal.teammanager.infrastructure.endpoint.mapper.model.IUserMapper;
 import com.naofeleal.teammanager.infrastructure.endpoint.model.authentication.request.AuthenticationRequest;
 import com.naofeleal.teammanager.infrastructure.endpoint.model.authentication.response.AuthenticationResponse;
 import org.junit.jupiter.api.Test;
@@ -13,6 +20,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,6 +35,12 @@ class AuthControllerTest {
 
     @Mock
     private ILoginUseCase loginUseCase;
+
+    @Mock
+    IUserRepository userRepository;
+
+    @Mock
+    IUserMapper userMapper;
 
     @InjectMocks
     private AuthController authController;
@@ -75,17 +90,25 @@ class AuthControllerTest {
 
     @Test
     void loginShouldSuccess() {
-        AuthenticationRequest authenticationRequest = new AuthenticationRequest("existinguser@example.com", "password123");
+        BaseUser user = new SimpleUser(
+                1L,
+                new Name("Nao"),
+                new Name("Fel"),
+                new Email("example@gmail.com"),
+                new Password("insecure_password")
+        );
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest("example@gmail.com", "insecure_password");
         String expectedJwt = "dummy-jwt-token";
 
         when(loginUseCase.execute(anyString(), anyString())).thenReturn(expectedJwt);
+        when(userRepository.findByEmail(authenticationRequest.email())).thenReturn(Optional.of(user));
 
         ResponseEntity<AuthenticationResponse> response = authController.login(authenticationRequest);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(expectedJwt, response.getBody().token());
-        verify(loginUseCase, times(1)).execute("existinguser@example.com", "password123");
+        verify(loginUseCase, times(1)).execute("example@gmail.com", "insecure_password");
     }
 
     @Test

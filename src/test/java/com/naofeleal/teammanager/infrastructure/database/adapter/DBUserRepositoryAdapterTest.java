@@ -108,7 +108,7 @@ class DBUserRepositoryAdapterTest {
 
         Set<DBUser> dbUsers = Set.of(dbUser, dbBaseUser2);
 
-        when(userRepository.findSimpleUsersWithoutTeam()).thenReturn(dbUsers);
+        when(userRepository.findByTeamIsNullAndAdminIsNullAndManagerIsNull()).thenReturn(dbUsers);
         when(userMapper.toDomainModel(dbUser)).thenReturn(user);
         when(userMapper.toDomainModel(dbBaseUser2)).thenReturn(simpleUser2);
 
